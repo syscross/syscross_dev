@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SysCross</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #000000;
+            cursor: none; 
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .sys-text {
+            color: rgba(255, 255, 255, 0.05);
+            font-size: 3rem;
+            letter-spacing: 1rem;
+            user-select: none;
+            font-weight: bold;
+        }
+        .cursor-core {
+            width: 4px;
+            height: 4px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+        }
+        .cursor-trail {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px 8px rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="sys-text">SYS X</div>
+    <div class="cursor-trail" id="cursor-trail"></div>
+    <div class="cursor-core" id="cursor-core"></div>
+    <script>
+        const core = document.getElementById('cursor-core');
+        const trail = document.getElementById('cursor-trail');
+        
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let trailX = mouseX;
+        let trailY = mouseY;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            core.style.left = mouseX + 'px';
+            core.style.top = mouseY + 'px';
+        });
+
+        function animateCursor() {
+            let distX = mouseX - trailX;
+            let distY = mouseY - trailY;
+            
+            trailX += distX * 0.15;
+            trailY += distY * 0.15;
+            
+            trail.style.left = trailX + 'px';
+            trail.style.top = trailY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+    </script>
+</body>
+</html>

@@ -50,7 +50,6 @@
             transform: translate(-50%, -50%);
             box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
         }
-        /* 그래픽 렌더링을 담당할 캔버스 레이어 추가 */
         #trail-canvas {
             position: fixed;
             top: 0;
@@ -76,7 +75,6 @@
         const canvas = document.getElementById('trail-canvas');
         const ctx = canvas.getContext('2d');
         
-        // 캔버스 해상도를 모니터 창 크기에 완벽하게 동기화
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -86,48 +84,108 @@
 
         let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         let points = [];
-        const MAX_AGE = 25; // 꼬리가 공간에 남아있는 프레임 수치
+        const MAX_AGE = 25;
+
+        // 드래그 셀렉션 박스용 변수 세팅
+        let isDragging = false;
+        let dragStart = { x: 0, y: 0 };
+        let dragCurrent = { x: 0, y: 0 };
+        let fadingBoxes = []; // 마우스를 뗀 후 사라지는 박스들을 관리하는 배열
+
+        document.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            dragStart.x = e.clientX;
+            dragStart.y = e.clientY;
+            dragCurrent.x = e.clientX;
+            dragCurrent.y = e.clientY;
+        });
 
         document.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
             
-            // 제일 앞장서는 빛의 코어는 즉시 이동
+            if (isDragging) {
+                dragCurrent.x = e.clientX;
+                dragCurrent.y = e.clientY;
+            }
+            
             core.style.left = mouse.x + 'px';
             core.style.top = mouse.y + 'px';
         });
 
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                // 약간이라도 드래그한 영역이 있을 때만 배열에 추가해서 페이드아웃 발동
+                if (Math.abs(dragCurrent.x - dragStart.x) > 5 || Math.abs(dragCurrent.y - dragStart.y) > 5) {
+                    fadingBoxes.push({
+                        x1: dragStart.x,
+                        y1: dragStart.y,
+                        x2: dragCurrent.x,
+                        y2: dragCurrent.y,
+                        opacity: 1.0
+                    });
+                }
+            }
+        });
+
+        // 박스 렌더링 공통 함수
+        function drawBox(ctx, x1, y1, x2, y2, opacity) {
+            const x = Math.min(x1, x2);
+            const y = Math.min(y1, y2);
+            const w = Math.abs(x2 - x1);
+            const h = Math.abs(y2 - y1);
+            
+            ctx.fillStyle = `rgba(255, 255, 255, ${0.05 * opacity})`;
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 * opacity})`;
+            ctx.lineWidth = 1;
+            
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeRect(x, y, w, h);
+        }
+
         function animate() {
-            // 매 프레임마다 화면을 지우고 새로 그림
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 마우스가 지나간 진짜 절대 좌표를 역사(History) 배열에 기록
-            points.push({ x: mouse.x, y: mouse.y, age: 0 });
+            // 1. 현재 드래그 중인 실시간 박스 렌더링
+            if (isDragging) {
+                drawBox(ctx, dragStart.x, dragStart.y, dragCurrent.x, dragCurrent.y, 1.0);
+            }
             
-            // 시간의 흐름에 따라 입자들의 나이를 먹이고 수명이 다하면 소멸시킴
+            // 2. 마우스를 떼고 난 후 잔상처럼 서서히 사라지는 박스들
+            for (let i = fadingBoxes.length - 1; i >= 0; i--) {
+                let box = fadingBoxes[i];
+                drawBox(ctx, box.x1, box.y1, box.x2, box.y2, box.opacity);
+                box.opacity -= 0.03; // 페이드아웃 속도 조절 (숫자가 클수록 빨리 사라짐)
+                if (box.opacity <= 0) {
+                    fadingBoxes.splice(i, 1);
+                }
+            }
+
+            // 3. 빛의 궤적(Trail) 렌더링
+            points.push({ x: mouse.x, y: mouse.y, age: 0 });
             points.forEach(p => p.age += 1);
             points = points.filter(p => p.age <= MAX_AGE);
 
-            // 점과 점 사이를 벡터 선으로 완벽하게 이어붙임 (절대 안 끊어짐)
             if (points.length > 1) {
                 for (let i = 0; i < points.length - 1; i++) {
                     const p1 = points[i];
                     const p2 = points[i + 1];
                     
-                    // 과거의 궤적일수록 0에 가까워지고, 방금 지난 궤적일수록 1에 가까워지는 비율
                     const ratio = 1 - (p1.age / MAX_AGE);
                     
                     ctx.beginPath();
                     ctx.moveTo(p1.x, p1.y);
                     ctx.lineTo(p2.x, p2.y);
                     
-                    ctx.lineCap = 'round';
+                    // 불연속적인 하얀 점(관절 겹침) 현상을 완벽하게 제거
+                    ctx.lineCap = 'butt'; 
                     ctx.lineJoin = 'round';
-                    ctx.lineWidth = ratio * 6; // 꼬리 끝으로 갈수록 날카롭게 깎이는 물리 효과
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${ratio * 0.8})`; // 서서히 어둠 속으로 사라짐
+                    ctx.lineWidth = ratio * 5;
                     
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+                    // 그림자를 빼고 순수 투명도만으로 궤적을 잇게 만듦
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${ratio * 0.4})`;
+                    ctx.shadowBlur = 0; 
                     
                     ctx.stroke();
                 }

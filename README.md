@@ -1,2 +1,3 @@
-# syscross_dev
-⚙️ An Operating System Working on Browser
+# SysCross.Dev
+
+An Operating System Working on Browser

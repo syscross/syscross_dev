@@ -27,6 +27,7 @@
             color: rgba(255, 255, 255, 0.04);
             user-select: none;
             font-weight: bold;
+            z-index: 1; 
         }
         .sys-text {
             font-size: 3.5rem;
@@ -49,14 +50,15 @@
             transform: translate(-50%, -50%);
             box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
         }
-        .trail-dot {
+        /* 그래픽 렌더링을 담당할 캔버스 레이어 추가 */
+        #trail-canvas {
             position: fixed;
-            background-color: #ffffff;
-            border-radius: 50%;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
             z-index: 9998;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px 3px rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
@@ -66,48 +68,69 @@
         <div class="x-text">X</div>
     </div>
     
+    <canvas id="trail-canvas"></canvas>
     <div class="cursor-core" id="cursor-core"></div>
 
     <script>
         const core = document.getElementById('cursor-core');
+        const canvas = document.getElementById('trail-canvas');
+        const ctx = canvas.getContext('2d');
         
-        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-        let dots = [];
-        const DOT_COUNT = 25;
-
-        for(let i = 0; i < DOT_COUNT; i++) {
-            let d = document.createElement('div');
-            d.className = 'trail-dot';
-            
-            let ratio = 1 - (i / DOT_COUNT);
-            d.style.width = (ratio * 8) + 'px';
-            d.style.height = (ratio * 8) + 'px';
-            d.style.opacity = ratio * 0.4;
-            
-            document.body.appendChild(d);
-            dots.push({ x: mouse.x, y: mouse.y, el: d });
+        // 캔버스 해상도를 모니터 창 크기에 완벽하게 동기화
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        let points = [];
+        const MAX_AGE = 25; // 꼬리가 공간에 남아있는 프레임 수치
 
         document.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
             
+            // 제일 앞장서는 빛의 코어는 즉시 이동
             core.style.left = mouse.x + 'px';
             core.style.top = mouse.y + 'px';
         });
 
         function animate() {
-            dots[0].x += (mouse.x - dots[0].x) * 0.6;
-            dots[0].y += (mouse.y - dots[0].y) * 0.6;
+            // 매 프레임마다 화면을 지우고 새로 그림
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            for(let i = 1; i < DOT_COUNT; i++) {
-                dots[i].x += (dots[i-1].x - dots[i].x) * 0.45;
-                dots[i].y += (dots[i-1].y - dots[i].y) * 0.45;
-            }
+            // 마우스가 지나간 진짜 절대 좌표를 역사(History) 배열에 기록
+            points.push({ x: mouse.x, y: mouse.y, age: 0 });
             
-            for(let i = 0; i < DOT_COUNT; i++) {
-                dots[i].el.style.left = dots[i].x + 'px';
-                dots[i].el.style.top = dots[i].y + 'px';
+            // 시간의 흐름에 따라 입자들의 나이를 먹이고 수명이 다하면 소멸시킴
+            points.forEach(p => p.age += 1);
+            points = points.filter(p => p.age <= MAX_AGE);
+
+            // 점과 점 사이를 벡터 선으로 완벽하게 이어붙임 (절대 안 끊어짐)
+            if (points.length > 1) {
+                for (let i = 0; i < points.length - 1; i++) {
+                    const p1 = points[i];
+                    const p2 = points[i + 1];
+                    
+                    // 과거의 궤적일수록 0에 가까워지고, 방금 지난 궤적일수록 1에 가까워지는 비율
+                    const ratio = 1 - (p1.age / MAX_AGE);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    ctx.lineWidth = ratio * 6; // 꼬리 끝으로 갈수록 날카롭게 깎이는 물리 효과
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${ratio * 0.8})`; // 서서히 어둠 속으로 사라짐
+                    
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'rgba(255, 255, 255, 0.4)';
+                    
+                    ctx.stroke();
+                }
             }
             
             requestAnimationFrame(animate);

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SysCross</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100vw; 
+            height: 100%;
+            background-color: #000000;
+            cursor: none; 
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+            touch-action: none; 
+            overscroll-behavior: none;
+            user-select: none; 
+            -webkit-user-select: none;
+        }
+        
+        ::selection {
+            background: rgba(0, 255, 204, 0.3);
+            color: #ffffff;
+        }
+        ::-moz-selection {
+            background: rgba(0, 255, 204, 0.3);
+            color: #ffffff;
+        }
+
+        .sys-logo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #0b0b0b; 
+            pointer-events: none; 
+            z-index: -1; 
+            font-family: 'Arial Black', Impact, sans-serif;
+        }
+        .sys-text {
+            font-size: 4rem;
+            letter-spacing: 1.2rem;
+            margin-right: -1.2rem; 
+            margin-bottom: -1rem; 
+        }
+        .x-text {
+            font-size: 13rem; 
+            line-height: 0.9;
+            transform: scaleX(1.15); 
+        }
+        
+        #wm-root {
+            position: absolute;
+            top: 15px; 
+            left: 15px; right: 15px;
+            display: flex;
+            z-index: 10;
+        }
+        
+        .tile-container {
+            display: flex;
+            flex: 1 1 0%;
+            min-width: 0;
+            min-height: 0;
+        }
+        .tile-container.row { flex-direction: row; }
+        .tile-container.col { flex-direction: column; }
+        
+        .tile-cell {
+            flex: 1 1 0%;
+            min-width: 0;
+            min-height: 0;
+            position: relative;
+        }
+        
+        .tile-window {
+            position: absolute;
+            top: 5px; bottom: 5px; left: 5px; right: 5px;
+            background-color: rgba(10, 10, 10, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 5px 15px rgba(0,0,0,0.5);
+            display: block; 
+            padding: 12px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            color: #ccc;
+            font-size: 0.9rem;
+            user-select: text; 
+            -webkit-user-select: text;
+            transition: border-color 0.1s, background-color 0.1s;
+        }
+        
+        .tile-window::-webkit-scrollbar { width: 4px; }
+        .tile-window::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+        
+        .tile-cell:hover .tile-window, .tile-cell:focus-within .tile-window {
+            border-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(15, 15, 15, 0.7);
+        }
+
+        .tile-cell.targeted .tile-window {
+            border-color: rgba(255, 50, 50, 0.8) !important;
+            background-color: rgba(50, 10, 10, 0.6) !important;
+            box-shadow: inset 0 0 30px rgba(255, 0, 0, 0.2) !important;
+            transform: scale(0.98);
+        }
+
+        body.is-drag-selecting .tile-cell:not(.drag-origin) * {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+        }
+
+        .term-line { 
+            margin-bottom: 4px; 
+            word-break: break-all; 
+            white-space: pre-wrap; 
+        }
+        
+        .term-input-line {
+            display: flex;
+            color: #fff;
+            margin-bottom: 4px;
+            flex-wrap: wrap;
+        }
+        
+        .prompt { 
+            color: #00ffcc; 
+            margin-right: 8px; 
+            white-space: nowrap; 
+            font-weight: bold; 
+            user-select: none; 
+            -webkit-user-select: none;
+        }
+        
+        .term-input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: inherit;
+            font-size: inherit;
+            flex: 1;
+            min-width: 50px;
+            outline: none;
+        }
+
+        #trackpad-drawer {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: rgba(15, 15, 15, 0.6);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #trackpad-handle {
+            width: 80px;
+            height: 24px;
+            margin-top: 8px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .handle-dot {
+            width: 4px;
+            height: 4px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+            transition: opacity 0.1s;
+        }
+
+        #trackpad-area {
+            flex: 1;
+            width: 100%;
+            pointer-events: auto;
+        }
+
+        .cursor-core {
+            width: 4px;
+            height: 4px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 100000;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+        }
+        
+        .cursor-core.destructive {
+            background-color: #ff3232;
+            box-shadow: 0 0 15px 4px rgba(255, 50, 50, 0.9);
+        }
+
+        #trail-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9998;
+        }
+    </style>
+</head>
+<body>
+    <div class="sys-logo">
+        <div class="sys-text">SYS</div>
+        <div class="x-text">X</div>
+    </div>
+    
+    <div id="wm-root"></div>
+    
+    <div id="trackpad-drawer">
+        <div id="trackpad-handle">
+            <div class="handle-dot" id="handle-dot"></div>
+        </div>
+        <div id="trackpad-area"></div>
+    </div>
+    
+    <canvas id="trail-canvas"></canvas>
+    <div class="cursor-core" id="cursor-core" style="display: none;"></div>
+
+    <script>
+        const core = document.getElementById('cursor-core');
+        const canvas = document.getElementById('trail-canvas');
+        const ctx = canvas.getContext('2d');
+        const wmRoot = document.getElementById('wm-root');
+        const drawer = document.getElementById('trackpad-drawer');
+        const handle = document.getElementById('trackpad-handle');
+        const handleDot = document.getElementById('handle-dot');
+        const trackpadArea = document.getElementById('trackpad-area');
+        
+        const MIN_TILE_SIZE = 60;
+        
+        let drawerHeight = window.innerHeight * 0.5;
+        let mouse = { x: -1000, y: -1000 };
+        let dpr = window.devicePixelRatio || 1;
+        
+        function initLayout() {
+            dpr = window.devicePixelRatio || 1;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            ctx.scale(dpr, dpr);
+
+            drawer.style.height = drawerHeight + 'px';
+            wmRoot.style.bottom = (drawerHeight + 15) + 'px';
+        }
+        
+        window.addEventListener('resize', () => {
+            drawerHeight = window.innerHeight * 0.5;
+            initLayout();
+        });
+        initLayout();
+
+        let points = [];
+        const MAX_AGE = 25;
+
+        let isLeftDragging = false;
+        let isMiddleDragging = false;
+        let dragStart = { x: 0, y: 0 };
+        let dragCurrent = { x: 0, y: 0 };
+        let fadingBoxes = [];
+
+        function sanitizeStates() {
+            isLeftDragging = false;
+            isMiddleDragging = false;
+            core.classList.remove('destructive');
+            document.body.classList.remove('is-drag-selecting');
+            document.querySelectorAll('.tile-cell.targeted').forEach(cell => cell.classList.remove('targeted'));
+            document.querySelectorAll('.tile-cell.drag-origin').forEach(cell => cell.classList.remove('drag-origin'));
+        }
+
+        let globalActionLock = false;
+
+        function executeWithLock(fn) {
+            if (globalActionLock) return;
+            globalActionLock = true;
+            fn();
+            setTimeout(() => { globalActionLock = false; }, 300); 
+        }
+
+        function createTile() {
+            const cell = document.createElement('div');
+            cell.className = 'tile-cell';
+            
+            const win = document.createElement('div');
+            win.className = 'tile-window';
+            
+            const inputLine = document.createElement('div');
+            inputLine.className = 'term-input-line';
+            
+            const prompt = document.createElement('span');
+            prompt.className = 'prompt';
+            prompt.innerText = '>'; 
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'term-input';
+            input.autocomplete = 'off';
+            input.spellcheck = false;
+            input.enterKeyHint = 'done'; 
+            
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); 
+                    
+                    const val = input.value.trim();
+                    if (val) {
+                        const cmdParts = val.split(/\s+/);
+                        const cmd = cmdParts[0].toLowerCase();
+                        
+                        const echoDiv = document.createElement('div');
+                        echoDiv.className = 'term-line';
+                        echoDiv.innerHTML = '<span class="prompt">></span>' + val;
+                        win.insertBefore(echoDiv, inputLine);
+                        
+                        const errDiv = document.createElement('div');
+                        errDiv.className = 'term-line';
+
+                        if (cmd === 'sysfetch') {
+                            errDiv.style.color = '#ccc';
+                            errDiv.innerHTML = '<div style="margin-bottom:8px; text-align:center; font-family:\'Arial Black\', Impact, sans-serif;"><div style="font-size:1.8em; letter-spacing:2px; line-height:1;">SYS</div><div style="font-size:3.5em; line-height:0.85; transform:scaleX(1.15);">X</div></div><div><div style="color:#00ffcc; font-weight:bold;">dev@syscross</div><div>----------</div><div><span style="color:#00ffcc;">OS:</span> SysCross</div><div><span style="color:#00ffcc;">Shell:</span> syssh</div><div><span style="color:#00ffcc;">WM:</span> sysx</div></div>';
+                        } else if (cmd === 'sysinfo') {
+                            errDiv.style.color = '#ccc';
+                            const res = window.screen.width + 'x' + window.screen.height;
+                            errDiv.innerHTML = '<div style="margin-top:4px;"><div><span style="color:#00ffcc;">Res:</span> ' + res + '</div><div><span style="color:#00ffcc;">Cores:</span> ' + (navigator.hardwareConcurrency || '?') + '</div><div><span style="color:#00ffcc;">Lang:</span> ' + (navigator.language || '?') + '</div></div>';
+                        } else {
+                            errDiv.style.color = '#ff5555';
+                            errDiv.innerText = 'bash: ' + cmd + ': command not found';
+                        }
+                        
+                        win.insertBefore(errDiv, inputLine);
+                    }
+                    input.value = '';
+                    setTimeout(() => { win.scrollTop = win.scrollHeight; }, 10);
+                }
+            });
+            
+            cell.addEventListener('click', (e) => {
+                // e.isTrusted가 false면 스크립트가 강제로 쏜 클릭(트랙패드 가짜 클릭)입니다.
+                // 트랙패드로 창을 칠 때는 키보드가 팝업되지 않도록 원천 차단합니다.
+                if (!e.isTrusted) return; 
+                
+                if (window.getSelection().toString() === '') {
+                    input.focus({ preventScroll: true }); 
+                }
+            });
+            
+            inputLine.appendChild(prompt);
+            inputLine.appendChild(input);
+            win.appendChild(inputLine);
+            cell.appendChild(win);
+            
+            if (window.matchMedia('(pointer: fine)').matches) {
+                setTimeout(() => input.focus({ preventScroll: true }), 50);
+            }
+            
+            return cell;
+        }
+
+        function splitTile(targetCell, clientX, clientY) {
+            const rect = targetCell.getBoundingClientRect();
+            const ratio = rect.width / rect.height;
+            const relX = clientX - rect.left;
+            const relY = clientY - rect.top;
+            const distTop = relY;
+            const distBottom = rect.height - relY;
+            const distLeft = relX;
+            const distRight = rect.width - relX;
+            const minDist = Math.min(distTop, distBottom, distLeft, distRight);
+
+            let isRowSplit, insertBefore;
+
+            if (ratio > 1.5) {
+                isRowSplit = true; insertBefore = (relX < rect.width / 2);
+            } else if (ratio < 0.66) {
+                isRowSplit = false; insertBefore = (relY < rect.height / 2);
+            } else {
+                if (minDist === distLeft) { isRowSplit = true; insertBefore = true; } 
+                else if (minDist === distRight) { isRowSplit = true; insertBefore = false; } 
+                else if (minDist === distTop) { isRowSplit = false; insertBefore = true; } 
+                else { isRowSplit = false; insertBefore = false; }
+            }
+
+            if (isRowSplit && (rect.width / 2) < MIN_TILE_SIZE) {
+                if ((rect.height / 2) >= MIN_TILE_SIZE) { isRowSplit = false; insertBefore = (relY < rect.height / 2); } 
+                else { return; }
+            } else if (!isRowSplit && (rect.height / 2) < MIN_TILE_SIZE) {
+                if ((rect.width / 2) >= MIN_TILE_SIZE) { isRowSplit = true; insertBefore = (relX < rect.width / 2); } 
+                else { return; }
+            }
+
+            const container = document.createElement('div');
+            container.className = 'tile-container ' + (isRowSplit ? 'row' : 'col');
+            container.style.flex = targetCell.style.flex || '1 1 0%';
+
+            const newCell = createTile();
+            
+            targetCell.parentNode.replaceChild(container, targetCell);
+            targetCell.style.flex = '1 1 0%';
+            newCell.style.flex = '1 1 0%';
+
+            if (insertBefore) {
+                container.appendChild(newCell);
+                container.appendChild(targetCell);
+            } else {
+                container.appendChild(targetCell);
+                container.appendChild(newCell);
+            }
+        }
+
+        function removeTile(cell) {
+            const parent = cell.parentNode;
+            if (parent.id === 'wm-root') { cell.remove(); return; }
+            const sibling = cell.nextElementSibling || cell.previousElementSibling;
+            const grandParent = parent.parentNode;
+            cell.remove();
+            if (grandParent) {
+                sibling.style.flex = parent.style.flex || '1 1 0%';
+                grandParent.replaceChild(sibling, parent);
+            }
+        }
+
+        function checkTargetedTiles(x1, y1, x2, y2) {
+            const boxMinX = Math.min(x1, x2);
+            const boxMaxX = Math.max(x1, x2);
+            const boxMinY = Math.min(y1, y2);
+            const boxMaxY = Math.max(y1, y2);
+
+            document.querySelectorAll('.tile-cell').forEach(cell => {
+                const rect = cell.getBoundingClientRect();
+                const isIntersecting = !(boxMaxX < rect.left || boxMinX > rect.right || boxMaxY < rect.top || boxMinY > rect.bottom);
+                if (isIntersecting) cell.classList.add('targeted');
+                else cell.classList.remove('targeted');
+            });
+        }
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        let isCursorHome = true;
+        let isReturning = false;
+
+        function returnCursorToHandle() {
+            if (isReturning || isCursorHome) return;
+            isReturning = true;
+            sanitizeStates();
+
+            function step() {
+                const handleRect = handle.getBoundingClientRect();
+                const targetX = handleRect.left + handleRect.width / 2;
+                const targetY = handleRect.top + handleRect.height / 2;
+
+                mouse.x += (targetX - mouse.x) * 0.4;
+                mouse.y += (targetY - mouse.y) * 0.4;
+
+                core.style.left = mouse.x + 'px';
+                core.style.top = mouse.y + 'px';
+                
+                points.push({ x: mouse.x, y: mouse.y, age: 0 });
+
+                if (Math.hypot(targetX - mouse.x, targetY - mouse.y) > 2) {
+                    requestAnimationFrame(step);
+                } else {
+                    isReturning = false;
+                    isCursorHome = true;
+                    handleDot.style.opacity = '1';
+                    core.style.display = 'none';
+                    mouse.x = -1000;
+                }
+            }
+            step();
+        }
+
+        function deployCursorInstantWithTrail() {
+            if (!isCursorHome || isReturning) return;
+            isCursorHome = false;
+            handleDot.style.opacity = '0';
+            core.style.display = 'block';
+
+            const handleRect = handle.getBoundingClientRect();
+            const startX = handleRect.left + handleRect.width / 2;
+            const startY = handleRect.top + handleRect.height / 2;
+
+            const targetX = window.innerWidth / 2;
+            const targetY = (window.innerHeight - drawerHeight) / 2;
+
+            mouse.x = targetX;
+            mouse.y = targetY;
+            core.style.left = mouse.x + 'px';
+            core.style.top = mouse.y + 'px';
+
+            points = [];
+            const trailSteps = 15;
+            for (let i = 0; i < trailSteps; i++) {
+                const ratio = i / trailSteps;
+                points.push({
+                    x: startX + (targetX - startX) * ratio,
+                    y: startY + (targetY - startY) * ratio,
+                    age: (trailSteps - i) * 1.5 
+                });
+            }
+        }
+
+        // --- 서랍 핸들 제어 ---
+        handle.addEventListener('touchstart', (e) => { 
+            e.preventDefault(); e.stopPropagation(); 
+        }, {passive: false});
+        
+        handle.addEventListener('touchmove', (e) => {
+            e.preventDefault(); e.stopPropagation();
+            const touchY = e.touches[0].clientY;
+            drawerHeight = window.innerHeight - touchY;
+            if (drawerHeight < 60) drawerHeight = 60;
+            if (drawerHeight > window.innerHeight * 0.8) drawerHeight = window.innerHeight * 0.8;
+            
+            drawer.style.height = drawerHeight + 'px';
+            wmRoot.style.bottom = (drawerHeight + 15) + 'px';
+
+            const boundY = window.innerHeight - drawerHeight;
+            if (!isCursorHome && mouse.y > boundY && !isReturning) {
+                returnCursorToHandle();
+            }
+        }, {passive: false});
+
+        // --- 가상 트랙패드 제어 ---
+        let tpState = 'idle'; 
+        let tpTimer = null;
+        let tpLastTap = 0;
+        let tpStartPos = {x:0, y:0};
+        let tpLastPos = {x:0, y:0};
+
+        trackpadArea.addEventListener('touchstart', (e) => {
+            e.preventDefault(); e.stopPropagation();
+            
+            if (tpState === 'idle') sanitizeStates();
+
+            const now = Date.now();
+            const timeSinceLastTap = now - tpLastTap;
+            tpStartPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            tpLastPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
+            if (isCursorHome && !isReturning) {
+                deployCursorInstantWithTrail();
+            }
+
+            if (timeSinceLastTap > 0 && timeSinceLastTap < 300) {
+                tpState = 'double_tap_down';
+                clearTimeout(tpTimer);
+                tpTimer = setTimeout(() => {
+                    if (tpState === 'double_tap_down') {
+                        tpState = 'dragging';
+                        isLeftDragging = true;
+                        dragStart = { x: mouse.x, y: mouse.y };
+                        dragCurrent = { x: mouse.x, y: mouse.y };
+                        document.body.classList.add('is-drag-selecting');
+                        const cell = document.elementFromPoint(mouse.x, mouse.y)?.closest('.tile-cell');
+                        document.querySelectorAll('.tile-cell').forEach(c => c.classList.remove('drag-origin'));
+                        if (cell) cell.classList.add('drag-origin');
+                    }
+                }, 200);
+            } else {
+                tpState = 'single_tap_down';
+                clearTimeout(tpTimer);
+                tpTimer = setTimeout(() => {
+                    if (tpState === 'single_tap_down') {
+                        tpState = 'destroying';
+                        isMiddleDragging = true;
+                        dragStart = { x: mouse.x, y: mouse.y };
+                        dragCurrent = { x: mouse.x, y: mouse.y };
+                        core.classList.add('destructive');
+                        if (navigator.vibrate) navigator.vibrate(50);
+                    }
+                }, 400);
+            }
+        }, {passive: false});
+
+        trackpadArea.addEventListener('touchmove', (e) => {
+            e.preventDefault(); e.stopPropagation();
+            if (isReturning) return;
+
+            const dist = Math.hypot(e.touches[0].clientX - tpStartPos.x, e.touches[0].clientY - tpStartPos.y);
+
+            if (dist > 5) {
+                if (tpState === 'single_tap_down') {
+                    clearTimeout(tpTimer);
+                    tpState = 'moving'; 
+                    sanitizeStates(); 
+                } else if (tpState === 'double_tap_down') {
+                    clearTimeout(tpTimer);
+                    tpState = 'dragging'; 
+                    isLeftDragging = true;
+                    dragStart = { x: mouse.x, y: mouse.y };
+                    dragCurrent = { x: mouse.x, y: mouse.y };
+                    document.body.classList.add('is-drag-selecting');
+                    const cell = document.elementFromPoint(mouse.x, mouse.y)?.closest('.tile-cell');
+                    document.querySelectorAll('.tile-cell').forEach(c => c.classList.remove('drag-origin'));
+                    if (cell) cell.classList.add('drag-origin');
+                }
+            }
+
+            const dx = e.touches[0].clientX - tpLastPos.x;
+            const dy = e.touches[0].clientY - tpLastPos.y;
+            tpLastPos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+
+            mouse.x += dx * 1.5;
+            mouse.y += dy * 1.5;
+
+            const boundY = window.innerHeight - drawerHeight;
+            mouse.x = Math.max(0, Math.min(window.innerWidth, mouse.x));
+            mouse.y = Math.max(0, Math.min(boundY - 5, mouse.y)); 
+
+            core.style.left = mouse.x + 'px';
+            core.style.top = mouse.y + 'px';
+
+            if (tpState === 'dragging') {
+                dragCurrent = { x: mouse.x, y: mouse.y };
+            } else if (tpState === 'destroying') {
+                dragCurrent = { x: mouse.x, y: mouse.y };
+                checkTargetedTiles(dragStart.x, dragStart.y, dragCurrent.x, dragCurrent.y);
+            }
+        }, {passive: false});
+
+        function handleTrackpadEnd(e) {
+            e.preventDefault(); e.stopPropagation();
+            clearTimeout(tpTimer);
+            if (isReturning) return;
+
+            const now = Date.now();
+
+            if (tpState === 'single_tap_down') {
+                const el = document.elementFromPoint(mouse.x, mouse.y);
+                if (el && el.tagName !== 'INPUT' && el.tagName !== 'TEXTAREA') {
+                    const clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true, view: window });
+                    el.dispatchEvent(clickEvent);
+                    if (navigator.vibrate) navigator.vibrate(20);
+                }
+                tpLastTap = now;
+            } else if (tpState === 'double_tap_down') {
+                const cell = document.elementFromPoint(mouse.x, mouse.y)?.closest('.tile-cell');
+                if (cell) splitTile(cell, mouse.x, mouse.y);
+                else if (wmRoot.children.length === 0) {
+                    const newCell = createTile();
+                    wmRoot.appendChild(newCell);
+                }
+                tpLastTap = 0;
+            } else if (tpState === 'dragging') {
+                const dragDist = Math.hypot(dragCurrent.x - dragStart.x, dragCurrent.y - dragStart.y);
+                if (dragDist > 5) fadingBoxes.push({ ...dragStart, x2: dragCurrent.x, y2: dragCurrent.y, opacity: 1.0, r: 255, g: 255, b: 255 });
+                tpLastTap = 0;
+            } else if (tpState === 'destroying') {
+                const dragDist = Math.hypot(dragCurrent.x - dragStart.x, dragCurrent.y - dragStart.y);
+                const targetedCells = document.querySelectorAll('.tile-cell.targeted');
+
+                if (dragDist <= 5) {
+                    const cell = document.elementFromPoint(dragCurrent.x, dragCurrent.y)?.closest('.tile-cell');
+                    if (cell) {
+                        removeTile(cell);
+                        if (navigator.vibrate) navigator.vibrate(100);
+                    }
+                } else {
+                    if (dragDist > 5) {
+                        Array.from(targetedCells).forEach(cell => removeTile(cell));
+                        fadingBoxes.push({ ...dragStart, x2: dragCurrent.x, y2: dragCurrent.y, opacity: 1.0, r: 255, g: 50, b: 50 });
+                        if (navigator.vibrate && targetedCells.length > 0) navigator.vibrate(100);
+                    } else {
+                        Array.from(targetedCells).forEach(cell => removeTile(cell));
+                    }
+                }
+                tpLastTap = 0;
+            } else if (tpState === 'moving') {
+                tpLastTap = 0; 
+            }
+
+            sanitizeStates();
+            tpState = 'idle';
+        }
+
+        trackpadArea.addEventListener('touchend', handleTrackpadEnd, {passive: false});
+        trackpadArea.addEventListener('touchcancel', handleTrackpadEnd, {passive: false});
+
+        // --- 다이렉트 터치 ---
+        let screenTouchTimer;
+        let isScreenTouchMoved = false;
+        let screenLastTapTime = 0; 
+        let initialPinchDist = null;
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.closest('#trackpad-drawer')) return;
+
+            if (e.touches.length === 2) {
+                clearTimeout(screenTouchTimer); 
+                initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                return;
+            }
+
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                const currentTime = Date.now();
+                const tapLength = currentTime - screenLastTapTime;
+
+                if (tapLength < 300 && tapLength > 0 && !e.target.closest('.term-input')) {
+                    e.preventDefault();
+                    screenLastTapTime = 0;
+                    clearTimeout(screenTouchTimer);
+                    executeWithLock(() => {
+                        const cell = e.target.closest('.tile-cell');
+                        if (cell) splitTile(cell, touch.clientX, touch.clientY);
+                        else if (wmRoot.children.length === 0) {
+                            const newCell = createTile();
+                            wmRoot.appendChild(newCell);
+                        }
+                    });
+                    return;
+                }
+                screenLastTapTime = currentTime;
+                isScreenTouchMoved = false;
+                
+                let dStart = { x: touch.clientX, y: touch.clientY };
+                let dCurr = { x: touch.clientX, y: touch.clientY };
+
+                screenTouchTimer = setTimeout(() => {
+                    if (!isScreenTouchMoved) {
+                        executeWithLock(() => {
+                            isMiddleDragging = true; 
+                            dragStart = dStart;
+                            dragCurrent = dCurr;
+                            
+                            if (navigator.vibrate) navigator.vibrate(50);
+                            if (document.activeElement) document.activeElement.blur(); 
+                            
+                            checkTargetedTiles(dragStart.x, dragStart.y, dragCurrent.x, dragCurrent.y);
+                        });
+                    }
+                }, 400); 
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (e.target.closest('#trackpad-drawer')) return;
+
+            if (e.touches.length === 2 && initialPinchDist !== null) {
+                const currentPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+                const delta = currentPinchDist - initialPinchDist;
+                if (delta > 60) { 
+                    executeWithLock(() => {
+                        if (!document.fullscreenElement) {
+                            document.documentElement.requestFullscreen().catch(()=>{});
+                            if (navigator.vibrate) navigator.vibrate(50);
+                        }
+                    });
+                    initialPinchDist = currentPinchDist; 
+                } else if (delta < -60) { 
+                    executeWithLock(() => {
+                        if (document.fullscreenElement) {
+                            document.exitFullscreen().catch(()=>{});
+                            if (navigator.vibrate) navigator.vibrate(50);
+                        }
+                    });
+                    initialPinchDist = currentPinchDist;
+                }
+                return;
+            }
+
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                if (!dragStart) dragStart = { x: touch.clientX, y: touch.clientY };
+                
+                if (Math.hypot(touch.clientX - dragStart.x, touch.clientY - dragStart.y) > 10) {
+                    isScreenTouchMoved = true;
+                    clearTimeout(screenTouchTimer);
+                }
+
+                if (isMiddleDragging) {
+                    dragCurrent = { x: touch.clientX, y: touch.clientY };
+                    checkTargetedTiles(dragStart.x, dragStart.y, dragCurrent.x, dragCurrent.y);
+                    e.preventDefault(); 
+                }
+            }
+        }, { passive: false });
+
+        function handleScreenTouchEnd(e) {
+            if (e.touches.length < 2) initialPinchDist = null;
+            clearTimeout(screenTouchTimer);
+
+            if (isMiddleDragging && e.touches.length === 0 && !e.target.closest('#trackpad-drawer')) {
+                const dragDist = Math.hypot(dragCurrent.x - dragStart.x, dragCurrent.y - dragStart.y);
+                const targetedCells = document.querySelectorAll('.tile-cell.targeted');
+
+                if (dragDist <= 5) { 
+                    const cell = document.elementFromPoint(dragCurrent.x, dragCurrent.y)?.closest('.tile-cell');
+                    if (cell) {
+                        removeTile(cell);
+                        if (navigator.vibrate) navigator.vibrate(100);
+                    }
+                } else { 
+                    Array.from(targetedCells).forEach(cell => removeTile(cell));
+                    fadingBoxes.push({ ...dragStart, x2: dragCurrent.x, y2: dragCurrent.y, opacity: 1.0, r: 255, g: 50, b: 50 });
+                    if (navigator.vibrate && targetedCells.length > 0) navigator.vibrate(100);
+                }
+                sanitizeStates();
+            }
+        }
+
+        document.addEventListener('touchend', handleScreenTouchEnd);
+        document.addEventListener('touchcancel', handleScreenTouchEnd);
+
+        function drawBox(ctx, x1, y1, x2, y2, opacity, r, g, b) {
+            const x = Math.min(x1, x2);
+            const y = Math.min(y1, y2);
+            const w = Math.abs(x2 - x1);
+            const h = Math.abs(y2 - y1);
+            
+            ctx.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + (0.1 * opacity) + ')';
+            ctx.strokeStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + (0.4 * opacity) + ')';
+            ctx.lineWidth = 1;
+            ctx.fillRect(x, y, w, h);
+            ctx.strokeRect(x, y, w, h);
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+            
+            if (isLeftDragging) {
+                drawBox(ctx, dragStart.x, dragStart.y, dragCurrent.x, dragCurrent.y, 1.0, 255, 255, 255);
+            } else if (isMiddleDragging) {
+                drawBox(ctx, dragStart.x, dragStart.y, dragCurrent.x, dragCurrent.y, 1.0, 255, 50, 50);
+            }
+            
+            for (let i = fadingBoxes.length - 1; i >= 0; i--) {
+                let box = fadingBoxes[i];
+                drawBox(ctx, box.x, box.y, box.x2, box.y2, box.opacity, box.r, box.g, box.b);
+                box.opacity -= 0.04; 
+                if (box.opacity <= 0) fadingBoxes.splice(i, 1);
+            }
+
+            if (core.style.display === 'block') {
+                points.push({ x: mouse.x, y: mouse.y, age: 0 });
+            }
+            
+            points.forEach(p => p.age += 1);
+            points = points.filter(p => p.age <= MAX_AGE);
+
+            if (points.length > 1) {
+                for (let i = 0; i < points.length - 1; i++) {
+                    const p1 = points[i];
+                    const p2 = points[i + 1];
+                    const ratio = 1 - (p1.age / MAX_AGE);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(p1.x, p1.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.lineCap = 'butt'; 
+                    ctx.lineJoin = 'round';
+                    ctx.lineWidth = ratio * 5;
+                    
+                    if (isMiddleDragging) {
+                        ctx.strokeStyle = 'rgba(255, 100, 100, ' + (ratio * 0.6) + ')';
+                    } else {
+                        ctx.strokeStyle = 'rgba(255, 255, 255, ' + (ratio * 0.4) + ')';
+                    }
+                    ctx.stroke();
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

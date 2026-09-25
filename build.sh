@@ -39,7 +39,7 @@ find . -type f -name "*.md" -not -path "*/\.*" | while read -r md_file; do
     $CSS
 </head>
 <body>
-$(awk 'NR==1 && /^---/ {y=1; next} y && /^---/ {y=0; next} !y {print}' "$md_file" | cmark --unsafe)
+$(awk 'NR==1 && /^---/ {y=1; next} y && /^---/ {y=0; next} !y {print}' "$md_file" | cmark --unsafe | sed -E 's/href="([^"#]+)\.md(#.*)?"/href="\1\2"/g')
 </body>
 </html>
 EOF

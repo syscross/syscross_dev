@@ -12,6 +12,7 @@ sorting-spec: |-
 - `_`
 	- [C](_/c.md)
 	- [C++](_/cc.md)
+	- [C++ (Windows)](_/cpp.md)
 	- [C++ (Modules)](_/cxx.md)
 	- [Rust](_/rs.md)
 - `_ja-jp`

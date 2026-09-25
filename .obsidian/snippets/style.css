@@ -1,0 +1,21 @@
+.view-header-breadcrumb,
+.view-header-breadcrumb-separator {
+    display: none;
+}
+
+.theme-light, .theme-dark {
+  --link-decoration: none;
+  --link-decoration-hover: none;
+  --link-external-decoration: none;
+  --link-external-decoration-hover: none;
+}
+
+.external-link {
+  background-image: none;
+  padding-right: 0px;
+}
+
+.is-live-preview .HyperMD-header {
+    --p-spacing: 0;
+  line-height: 1.5;
+}

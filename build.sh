@@ -39,7 +39,7 @@ find . -type f -name "*.md" -not -path "*/\.*" | while read -r md_file; do
     $CSS
 </head>
 <body>
-$(cmark --unsafe "$md_file")
+$(awk 'NR==1 && /^---/ {y=1; next} y && /^---/ {y=0; next} !y {print}' "$md_file" | cmark --unsafe)
 </body>
 </html>
 EOF

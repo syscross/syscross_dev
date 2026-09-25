@@ -21,3 +21,6 @@ sorting-spec: |-
 	- [전기기사](_ko-kr/전기기사.md)
 - `_ru-by`
 	- [Molchat Doma](_ru-by/molchat-doma.md)
+- `file-extensions`
+	- [mp3](file-extensions/mp3.md)
+	- [mp4](file-extensions/mp4.md)

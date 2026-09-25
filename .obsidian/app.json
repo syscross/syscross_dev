@@ -1,1 +1,8 @@
-{}
+{
+  "showInlineTitle": false,
+  "foldIndent": false,
+  "foldHeading": false,
+  "spellcheck": false,
+  "showLineNumber": true,
+  "promptDelete": false
+}

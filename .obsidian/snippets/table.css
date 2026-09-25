@@ -1,0 +1,33 @@
+table {
+  --table-cell-vertical-alignment: middle;
+}
+
+.markdown-rendered tr,
+.markdown-rendered th,
+.markdown-rendered th .cm-line,
+.markdown-rendered td,
+.markdown-rendered td .cm-line {
+  height: unset !important;
+  line-height: 1.5 !important;
+  white-space: nowrap !important;
+}
+
+.table1size2 td:nth-child(1) { font-size: 2em; min-width: 0 !important; }
+.table2size2 td:nth-child(2) { font-size: 2em; min-width: 0 !important; }
+.table3size2 td:nth-child(3) { font-size: 2em; min-width: 0 !important; }
+.table4size2 td:nth-child(4) { font-size: 2em; min-width: 0 !important; }
+.table5size2 td:nth-child(5) { font-size: 2em; min-width: 0 !important; }
+.table6size2 td:nth-child(6) { font-size: 2em; min-width: 0 !important; }
+.table7size2 td:nth-child(7) { font-size: 2em; min-width: 0 !important; }
+.table8size2 td:nth-child(8) { font-size: 2em; min-width: 0 !important; }
+.table9size2 td:nth-child(9) { font-size: 2em; min-width: 0 !important; }
+
+.table1size3 td:nth-child(1) { font-size: 3em; min-width: 0 !important; }
+.table2size3 td:nth-child(2) { font-size: 3em; min-width: 0 !important; }
+.table3size3 td:nth-child(3) { font-size: 3em; min-width: 0 !important; }
+.table4size3 td:nth-child(4) { font-size: 3em; min-width: 0 !important; }
+.table5size3 td:nth-child(5) { font-size: 3em; min-width: 0 !important; }
+.table6size3 td:nth-child(6) { font-size: 3em; min-width: 0 !important; }
+.table7size3 td:nth-child(7) { font-size: 3em; min-width: 0 !important; }
+.table8size3 td:nth-child(8) { font-size: 3em; min-width: 0 !important; }
+.table9size3 td:nth-child(9) { font-size: 3em; min-width: 0 !important; }

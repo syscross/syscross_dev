@@ -18,6 +18,10 @@ find . -type f -name "*.md" -not -path "*/\.*" | while read -r md_file; do
     dir_path=$(dirname -- "$md_file")
     base_name=$(basename -- "$md_file" .md)
     
+    if [ "${base_name^^}" = "README" ] || [ "${base_name^^}" = "INDEX" ]; then
+        base_name="index"
+    fi
+    
     target_dir=".target/${dir_path#./}"
     mkdir -p "$target_dir"
     

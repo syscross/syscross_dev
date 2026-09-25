@@ -18,3 +18,5 @@ sorting-spec: |-
 	- [電検三種](_ja-jp/電検三種.md)
 - `_ko-kr`
 	- [전기기사](_ko-kr/전기기사.md)
+- `_ru-by`
+	- [Molchat Doma](_ru-by/molchat-doma.md)

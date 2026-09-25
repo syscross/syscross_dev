@@ -4,5 +4,7 @@
   "foldHeading": false,
   "spellcheck": false,
   "showLineNumber": true,
-  "promptDelete": false
+  "promptDelete": false,
+  "newLinkFormat": "relative",
+  "useMarkdownLinks": true
 }

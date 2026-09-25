@@ -27,7 +27,7 @@ find . -type f -name "*.md" -not -path "*/\.*" | while read -r md_file; do
     
     html_file="$target_dir/$base_name.html"
     
-    echo "  -> 컴파일 중: $md_file => $html_file"
+    echo "  -> compiling: $md_file => $html_file"
     
     cat <<EOF > "$html_file"
 <!DOCTYPE html>

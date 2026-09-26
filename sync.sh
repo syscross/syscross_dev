@@ -1,6 +1,4 @@
 
-sh build.sh
-
 if [ $# -eq 0 ]; then
     msg="sync"
 else

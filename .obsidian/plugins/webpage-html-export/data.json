@@ -52,7 +52,7 @@
     },
     "aliasOptions": {
       "featureId": "aliases",
-      "enabled": false,
+      "enabled": true,
       "unavailable": false,
       "alwaysEnabled": false,
       "hideSettingsButton": false,
@@ -214,7 +214,7 @@
     "inlineOther": false,
     "combineAsSingleFile": false,
     "offlineResources": true,
-    "themeName": "",
+    "themeName": "Default",
     "slugifyPaths": true,
     "flattenExportPaths": false,
     "fixLinks": true,
@@ -222,9 +222,7 @@
     "siteName": "SysCross",
     "iconEmojiStyle": "Native",
     "exportRoot": "",
-    "includePluginCss": [
-      "custom-font-loader"
-    ],
+    "includePluginCss": [],
     "includeStyleCssIds": [],
     "autoDisposeWebpages": true
   },

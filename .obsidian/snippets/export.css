@@ -6,3 +6,12 @@ h1.page-title {
 div.header {
   display: none;
 }
+
+div#left-content,
+div#right-content {
+  display: none;
+}
+
+div.markdown-preview-section {
+  font-family: monospace;
+}

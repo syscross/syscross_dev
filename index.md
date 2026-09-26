@@ -1,6 +1,7 @@
 ---
 sorting-spec: |-
   target-folder: /*
+  index
   /:files
   /folders
   < vsc-unicode

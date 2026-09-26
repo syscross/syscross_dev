@@ -2,6 +2,7 @@
   "enabledCssSnippets": [
     "style",
     "table",
-    "export"
+    "export",
+    "separator"
   ]
 }

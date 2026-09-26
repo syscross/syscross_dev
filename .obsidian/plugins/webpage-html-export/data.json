@@ -215,7 +215,7 @@
     "combineAsSingleFile": false,
     "offlineResources": true,
     "themeName": "Default",
-    "slugifyPaths": true,
+    "slugifyPaths": false,
     "flattenExportPaths": false,
     "fixLinks": true,
     "faviconPath": "",

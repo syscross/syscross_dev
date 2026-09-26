@@ -76,7 +76,7 @@
     },
     "fileNavigationOptions": {
       "featureId": "file-navigation",
-      "enabled": false,
+      "enabled": true,
       "unavailable": false,
       "alwaysEnabled": false,
       "hideSettingsButton": false,
@@ -156,7 +156,7 @@
     },
     "sidebarOptions": {
       "featureId": "sidebar",
-      "enabled": false,
+      "enabled": true,
       "unavailable": false,
       "alwaysEnabled": false,
       "hideSettingsButton": false,
@@ -223,8 +223,7 @@
     "iconEmojiStyle": "Native",
     "exportRoot": "",
     "includePluginCss": [
-      "custom-font-loader",
-      "obsidian-hider"
+      "custom-font-loader"
     ],
     "includeStyleCssIds": [],
     "autoDisposeWebpages": true

@@ -1,6 +1,7 @@
 {
   "enabledCssSnippets": [
     "style",
-    "table"
+    "table",
+    "export"
   ]
 }

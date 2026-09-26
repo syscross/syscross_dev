@@ -76,7 +76,7 @@
     },
     "fileNavigationOptions": {
       "featureId": "file-navigation",
-      "enabled": false,
+      "enabled": true,
       "unavailable": false,
       "alwaysEnabled": false,
       "hideSettingsButton": false,
@@ -95,7 +95,7 @@
     },
     "searchOptions": {
       "featureId": "search",
-      "enabled": false,
+      "enabled": true,
       "unavailable": false,
       "alwaysEnabled": false,
       "hideSettingsButton": false,
@@ -156,7 +156,7 @@
     },
     "sidebarOptions": {
       "featureId": "sidebar",
-      "enabled": false,
+      "enabled": true,
       "unavailable": false,
       "alwaysEnabled": false,
       "hideSettingsButton": false,

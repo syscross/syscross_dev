@@ -1,4 +1,6 @@
 
+.OBSIDIANTEST
+
 .obsidian/workspace*.json
 .trash/
 

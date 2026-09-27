@@ -9,7 +9,7 @@
   "tag-pane": true,
   "footnotes": false,
   "properties": true,
-  "page-preview": false,
+  "page-preview": true,
   "daily-notes": false,
   "templates": true,
   "note-composer": true,

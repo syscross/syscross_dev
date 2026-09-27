@@ -7,7 +7,7 @@ sorting-spec: |-
   < vsc-unicode
 ---
 
-# SysCross
+# Home
 
 - [IDC](idc.md)
 - `_`

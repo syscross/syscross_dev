@@ -1,4 +1,4 @@
 
-cd .ignore/quartz
+cd .quartz
 
-npx quartz build -d ../.. -o ../../.target
+npx quartz build -d .. -o ../.target

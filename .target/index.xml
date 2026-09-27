@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
     <channel>
-      <title></title>
+      <title>SysCross</title>
       <link>https://syscross.dev</link>
-      <description>Last 10 notes on </description>
+      <description>Last 10 notes on SysCross</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
     <title>_</title>
     <link>https://syscross.dev/_/</link>
     <guid>https://syscross.dev/_/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>inc</title>
     <link>https://syscross.dev/_/c/inc/</link>
     <guid>https://syscross.dev/_/c/inc/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>c</title>
     <link>https://syscross.dev/_/c/</link>
     <guid>https://syscross.dev/_/c/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>inc</title>
     <link>https://syscross.dev/_/cc/inc/</link>
     <guid>https://syscross.dev/_/cc/inc/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>cc</title>
     <link>https://syscross.dev/_/cc/</link>
     <guid>https://syscross.dev/_/cc/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>std</title>
     <link>https://syscross.dev/_/cc/std/</link>
     <guid>https://syscross.dev/_/cc/std/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>inc</title>
     <link>https://syscross.dev/_/cpp/inc/</link>
     <guid>https://syscross.dev/_/cpp/inc/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>cpp</title>
     <link>https://syscross.dev/_/cpp/</link>
     <guid>https://syscross.dev/_/cpp/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>keywords</title>
     <link>https://syscross.dev/_/cxx/keywords/</link>
     <guid>https://syscross.dev/_/cxx/keywords/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item><item>
     <title>cxx</title>
     <link>https://syscross.dev/_/cxx/</link>
     <guid>https://syscross.dev/_/cxx/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Sun, 27 Sep 2026 13:54:06 GMT</pubDate>
+    <pubDate>Sun, 27 Sep 2026 13:55:21 GMT</pubDate>
   </item>
     </channel>
   </rss>

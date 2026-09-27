@@ -6,6 +6,8 @@
   "custom-sort",
   "folder-notes",
   "webpage-html-export",
-  "obsidian-git",
-  "export-to-html"
+  "export-to-html",
+  "convert-url-to-iframe",
+  "obsidian-paste-image-rename",
+  "git-vault-sync"
 ]

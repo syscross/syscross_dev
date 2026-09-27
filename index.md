@@ -7,8 +7,6 @@ sorting-spec: |-
   < vsc-unicode
 ---
 
-# Index
-
 - [IDC](idc.md)
 - `_`
 	- [C](_/c.md)

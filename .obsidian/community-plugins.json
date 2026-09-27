@@ -5,8 +5,8 @@
   "css-editor",
   "custom-sort",
   "folder-notes",
-  "webpage-html-export",
   "export-to-html",
   "convert-url-to-iframe",
-  "obsidian-paste-image-rename"
+  "obsidian-paste-image-rename",
+  "direct-git-sync"
 ]

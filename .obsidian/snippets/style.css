@@ -1,8 +1,11 @@
+
+/* no breadcrumb */
 .view-header-breadcrumb,
 .view-header-breadcrumb-separator {
     display: none;
 }
 
+/* no link underline */
 .theme-light, .theme-dark {
   --link-decoration: none;
   --link-decoration-hover: none;
@@ -10,12 +13,14 @@
   --link-external-decoration-hover: none;
 }
 
+/* no external link icon */
 .external-link {
   background-image: none;
   padding-right: 0px;
 }
 
+/* no margin above header */
 .is-live-preview .HyperMD-header {
-    --p-spacing: 0;
+  --p-spacing: 0;
   line-height: 1.5;
 }

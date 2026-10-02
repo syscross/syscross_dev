@@ -24,3 +24,17 @@
     background:var(--tab-outline-color);
     margin:var(--replete-custom-separators-vertical-padding) 0 var(--replete-custom-separators-vertical-padding) var(--replete-custom-separators-left-margin);
 }
+
+/* Separator above */
+/*
+.nav-files-container [class*=nav-]:has(:is(
+    [data-path="_"]
+))::before {
+    content:'';
+    display:block;
+    height:1px;
+    width:calc(100% + 32px);
+    background:var(--tab-outline-color);
+    margin:var(--replete-custom-separators-vertical-padding) 0 var(--replete-custom-separators-vertical-padding) var(--replete-custom-separators-left-margin);
+}
+*/

@@ -6,65 +6,65 @@
       <description>Last 10 notes on SysCross</description>
       <generator>Quartz -- quartz.jzhao.xyz</generator>
       <item>
+    <title>_</title>
+    <link>https://syscross.dev/_/</link>
+    <guid>https://syscross.dev/_/</guid>
+    <description><![CDATA[  ]]></description>
+    <pubDate>Fri, 02 Oct 2026 18:21:22 GMT</pubDate>
+  </item><item>
     <title>_ko-kr</title>
     <link>https://syscross.dev/_ko-kr/</link>
     <guid>https://syscross.dev/_ko-kr/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Fri, 02 Oct 2026 17:59:41 GMT</pubDate>
+    <pubDate>Fri, 02 Oct 2026 18:21:22 GMT</pubDate>
   </item><item>
     <title>수학</title>
     <link>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/</link>
     <guid>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Fri, 02 Oct 2026 17:59:41 GMT</pubDate>
+    <pubDate>Fri, 02 Oct 2026 18:21:22 GMT</pubDate>
   </item><item>
     <title>전기기사</title>
     <link>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/</link>
     <guid>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Fri, 02 Oct 2026 17:59:41 GMT</pubDate>
+    <pubDate>Fri, 02 Oct 2026 18:21:22 GMT</pubDate>
   </item><item>
     <title>Tag Index</title>
     <link>https://syscross.dev/tags/</link>
     <guid>https://syscross.dev/tags/</guid>
     <description><![CDATA[  ]]></description>
-    <pubDate>Fri, 02 Oct 2026 17:59:41 GMT</pubDate>
+    <pubDate>Fri, 02 Oct 2026 18:21:22 GMT</pubDate>
+  </item><item>
+    <title>행렬</title>
+    <link>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%ED%96%89%EB%A0%AC</link>
+    <guid>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%ED%96%89%EB%A0%AC</guid>
+    <description><![CDATA[ 행렬. ]]></description>
+    <pubDate>Fri, 02 Oct 2026 18:15:07 GMT</pubDate>
+  </item><item>
+    <title>벡터</title>
+    <link>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%EB%B2%A1%ED%84%B0</link>
+    <guid>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%EB%B2%A1%ED%84%B0</guid>
+    <description><![CDATA[ 벡터. ]]></description>
+    <pubDate>Fri, 02 Oct 2026 18:15:02 GMT</pubDate>
+  </item><item>
+    <title>복소수</title>
+    <link>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%EB%B3%B5%EC%86%8C%EC%88%98</link>
+    <guid>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%EB%B3%B5%EC%86%8C%EC%88%98</guid>
+    <description><![CDATA[ 복소수. ]]></description>
+    <pubDate>Fri, 02 Oct 2026 18:14:55 GMT</pubDate>
+  </item><item>
+    <title>C</title>
+    <link>https://syscross.dev/_/c</link>
+    <guid>https://syscross.dev/_/c</guid>
+    <description><![CDATA[ C. ]]></description>
+    <pubDate>Fri, 02 Oct 2026 18:09:43 GMT</pubDate>
   </item><item>
     <title>삼각함수</title>
     <link>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%EC%82%BC%EA%B0%81%ED%95%A8%EC%88%98</link>
     <guid>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%EC%82%BC%EA%B0%81%ED%95%A8%EC%88%98</guid>
     <description><![CDATA[ 삼각함수 삼각비(trigonometric ratio) 직각삼각형에는 세 변이 있다. (밑변/높이/빗변) 그 세 변 중, 두 변의 길이 간의 비례 관계를 나타내는 걸 삼각비라고 한다. 직각삼각형에는 두 개의 예각이 있다. ]]></description>
     <pubDate>Fri, 02 Oct 2026 17:17:22 GMT</pubDate>
-  </item><item>
-    <title>수학</title>
-    <link>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99</link>
-    <guid>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99</guid>
-    <description><![CDATA[ 수학 삼각함수 . ]]></description>
-    <pubDate>Fri, 02 Oct 2026 16:54:05 GMT</pubDate>
-  </item><item>
-    <title>전기기사</title>
-    <link>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC</link>
-    <guid>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC</guid>
-    <description><![CDATA[ 전기기사 필기 5과목, 객관지 4지 택일형, 과목당 20문항, 과목당 30분 (총 150분) 100점을 만점으로 하여 과목당 40점 이상, 전과목 평균 60점 이상 실기 필답형, 2시간 30분 100점을 만점으로 하여 60점 이상 필기 제1과목: 전기자기학 제2과목: 전력공학 제3과목: 전기기기 제4과목: 회로이론 및 제어공학 제5과목: 전기설비기술기준 실기 전기설비설계 수변전설비 시퀀스 및 PLC 조명 및 심벌 테이블 스펙 한국전기설비규정(KEC) + 내선규정 감리 . ]]></description>
-    <pubDate>Fri, 02 Oct 2026 16:54:05 GMT</pubDate>
-  </item><item>
-    <title>1_전기자기학</title>
-    <link>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/1_%EC%A0%84%EA%B8%B0%EC%9E%90%EA%B8%B0%ED%95%99</link>
-    <guid>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/1_%EC%A0%84%EA%B8%B0%EC%9E%90%EA%B8%B0%ED%95%99</guid>
-    <description><![CDATA[ 전기자기학. ]]></description>
-    <pubDate>Fri, 02 Oct 2026 16:54:05 GMT</pubDate>
-  </item><item>
-    <title>2_전력공학</title>
-    <link>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/2_%EC%A0%84%EB%A0%A5%EA%B3%B5%ED%95%99</link>
-    <guid>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/2_%EC%A0%84%EB%A0%A5%EA%B3%B5%ED%95%99</guid>
-    <description><![CDATA[ 전력공학. ]]></description>
-    <pubDate>Fri, 02 Oct 2026 16:54:05 GMT</pubDate>
-  </item><item>
-    <title>3_전기기기</title>
-    <link>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/3_%EC%A0%84%EA%B8%B0%EA%B8%B0%EA%B8%B0</link>
-    <guid>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/3_%EC%A0%84%EA%B8%B0%EA%B8%B0%EA%B8%B0</guid>
-    <description><![CDATA[ 전기기기. ]]></description>
-    <pubDate>Fri, 02 Oct 2026 16:54:05 GMT</pubDate>
   </item>
     </channel>
   </rss>

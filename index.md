@@ -10,7 +10,11 @@ sorting-spec: |-
 # Home
 
 - `_`
-	- [C](_/C.md)
+	- [C](C.md)
+	- [C++](_/cc.md)
+	- [C++ (Windows)](_/cpp.md)
+	- [C++ (Modules)](_/cxx.md)
+	- [Rust](_/rs.md)
 - `_ko-kr`
 	- [수학](_ko-kr/수학.md)
 	- [전기기사](_ko-kr/전기기사.md)

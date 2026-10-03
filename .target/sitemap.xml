@@ -9,10 +9,22 @@
     <lastmod>2026-10-03T05:15:51.000Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/_/cxx</loc>
-    <lastmod>2026-10-03T05:15:51.000Z</lastmod>
+    <lastmod>2026-10-03T05:20:08.000Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/_/rs</loc>
     <lastmod>2026-10-03T05:15:51.000Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ja-jp/%E9%9B%BB%E6%A4%9C%E4%B8%89%E7%A8%AE</loc>
+    <lastmod>2026-10-02T16:54:05.000Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ko-kr/%EA%B3%BC%ED%95%99</loc>
+    <lastmod>2026-10-03T05:24:23.933Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ko-kr/%EA%B3%BC%ED%95%99/%EB%AC%BC%EB%A6%AC%ED%95%99/%EC%A0%84%EC%9E%90%EA%B8%B0%ED%95%99</loc>
+    <lastmod>2026-10-03T05:22:17.725Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ko-kr/%EA%B3%BC%ED%95%99/%ED%99%94%ED%95%99/%EC%A3%BC%EA%B8%B0%EC%9C%A8%ED%91%9C</loc>
+    <lastmod>2026-10-03T05:23:03.772Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99</loc>
     <lastmod>2026-10-03T04:17:25.000Z</lastmod>
@@ -26,48 +38,102 @@
     <loc>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%ED%95%B4%EC%84%9D%ED%95%99/%EC%82%BC%EA%B0%81%ED%95%A8%EC%88%98</loc>
     <lastmod>2026-10-03T04:17:25.000Z</lastmod>
   </url><url>
-    <loc>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC</loc>
-    <lastmod>2026-10-03T04:17:25.000Z</lastmod>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/%EA%B3%B5%EC%A1%B0%EB%83%89%EB%8F%99%EA%B8%B0%EA%B3%84%EA%B8%B0%EC%82%AC</loc>
+    <lastmod>2026-10-03T05:39:45.224Z</lastmod>
   </url><url>
-    <loc>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/1_%EC%A0%84%EC%9E%90%EA%B8%B0%ED%95%99</loc>
-    <lastmod>2026-10-03T04:17:25.000Z</lastmod>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC</loc>
+    <lastmod>2026-10-03T05:21:12.252Z</lastmod>
   </url><url>
-    <loc>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/2_%EC%A0%84%EB%A0%A5%EA%B3%B5%ED%95%99</loc>
-    <lastmod>2026-10-02T16:54:05.000Z</lastmod>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/1_%EC%A0%84%EA%B8%B0%EC%9E%90%EA%B8%B0%ED%95%99</loc>
+    <lastmod>2026-10-03T05:20:56.679Z</lastmod>
   </url><url>
-    <loc>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/3_%EC%A0%84%EA%B8%B0%EA%B8%B0%EA%B8%B0</loc>
-    <lastmod>2026-10-02T16:54:05.000Z</lastmod>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/2_%EC%A0%84%EB%A0%A5%EA%B3%B5%ED%95%99</loc>
+    <lastmod>2026-10-02T12:15:08.795Z</lastmod>
   </url><url>
-    <loc>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/4_%ED%9A%8C%EB%A1%9C%EC%9D%B4%EB%A1%A0-%EB%B0%8F-%EC%A0%9C%EC%96%B4%EA%B3%B5%ED%95%99</loc>
-    <lastmod>2026-10-02T16:54:05.000Z</lastmod>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/3_%EC%A0%84%EA%B8%B0%EA%B8%B0%EA%B8%B0</loc>
+    <lastmod>2026-10-02T12:15:34.504Z</lastmod>
   </url><url>
-    <loc>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/5_%EC%A0%84%EA%B8%B0%EC%84%A4%EB%B9%84%EA%B8%B0%EC%88%A0%EA%B8%B0%EC%A4%80</loc>
-    <lastmod>2026-10-02T16:54:05.000Z</lastmod>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/4_%ED%9A%8C%EB%A1%9C%EC%9D%B4%EB%A1%A0-%EB%B0%8F-%EC%A0%9C%EC%96%B4%EA%B3%B5%ED%95%99</loc>
+    <lastmod>2026-10-02T12:15:30.509Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/5_%EC%A0%84%EA%B8%B0%EC%84%A4%EB%B9%84%EA%B8%B0%EC%88%A0%EA%B8%B0%EC%A4%80</loc>
+    <lastmod>2026-10-02T12:15:46.857Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/ai</loc>
+    <lastmod>2026-10-03T05:58:31.280Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/dev/ansible</loc>
+    <lastmod>2026-10-03T05:44:32.310Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/dev/terraform</loc>
+    <lastmod>2026-10-03T05:44:37.006Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/idc/cert/cdcp</loc>
+    <lastmod>2026-10-03T05:42:28.098Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/idc/cert/cdcs</loc>
+    <lastmod>2026-10-03T05:42:32.430Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/</loc>
     <lastmod>2026-10-03T05:15:51.000Z</lastmod>
   </url><url>
+    <loc>https://syscross.dev/net/cert/ccna</loc>
+    <lastmod>2026-10-03T05:42:43.536Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/net/cert/ccnp</loc>
+    <lastmod>2026-10-03T05:42:51.245Z</lastmod>
+  </url><url>
     <loc>https://syscross.dev/_/</loc>
-    <lastmod>2026-10-03T05:20:06.368Z</lastmod>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ja-jp/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/_ko-kr/</loc>
-    <lastmod>2026-10-03T05:20:06.368Z</lastmod>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ko-kr/%EA%B3%BC%ED%95%99/%EB%AC%BC%EB%A6%AC%ED%95%99/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ko-kr/%EA%B3%BC%ED%95%99/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ko-kr/%EA%B3%BC%ED%95%99/%ED%99%94%ED%95%99/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%EA%B8%B0%ED%95%98%ED%95%99/</loc>
-    <lastmod>2026-10-03T05:20:06.368Z</lastmod>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/</loc>
-    <lastmod>2026-10-03T05:20:06.368Z</lastmod>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%EB%8C%80%EC%88%98%ED%95%99/</loc>
-    <lastmod>2026-10-03T05:20:06.368Z</lastmod>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/_ko-kr/%EC%88%98%ED%95%99/%ED%95%B4%EC%84%9D%ED%95%99/</loc>
-    <lastmod>2026-10-03T05:20:06.368Z</lastmod>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
   </url><url>
-    <loc>https://syscross.dev/_ko-kr/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/</loc>
-    <lastmod>2026-10-03T05:20:06.368Z</lastmod>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/_ko-kr/%EC%9E%90%EA%B2%A9/%EC%A0%84%EA%B8%B0%EA%B8%B0%EC%82%AC/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/dev/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/idc/cert/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/idc/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/net/cert/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
+  </url><url>
+    <loc>https://syscross.dev/net/</loc>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
   </url><url>
     <loc>https://syscross.dev/tags/</loc>
-    <lastmod>2026-10-03T05:20:06.368Z</lastmod>
+    <lastmod>2026-10-03T05:59:49.876Z</lastmod>
   </url></urlset>

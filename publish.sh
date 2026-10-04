@@ -13,4 +13,8 @@ git pull
 
 sh build.sh
 
+git add .
+
+git commit -am "$msg"
+
 git push

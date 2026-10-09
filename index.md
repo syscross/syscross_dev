@@ -23,6 +23,7 @@ sorting-spec: |-
 		- [CSharp](_/oop/csharp.md)
 		- [Java](_/oop/java.md)
 - `_ja-jp`
+	- [漢字](_ja-jp/漢字.md)
 	- [電検三種](_ja-jp/電検三種.md)
 - `_ko-kr`
 	- [과학](_ko-kr/과학.md)

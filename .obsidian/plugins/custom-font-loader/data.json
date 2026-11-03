@@ -1,0 +1,15 @@
+{
+  "font_folder": "",
+  "interface_font": [
+    ".obsidian/fonts/Noto Sans Mono CJK JP.otf"
+  ],
+  "text_font": [
+    ".obsidian/fonts/Noto Sans Mono CJK JP.otf"
+  ],
+  "monospace_font": [
+    ".obsidian/fonts/Noto Sans Mono CJK JP.otf"
+  ],
+  "extra_fonts": [],
+  "emoji_support": true,
+  "force_mode": false
+}

@@ -1,5 +1,5 @@
 {
-  "buildCommand": "(pip3 install --break-system-packages markdown pymdown-extensions || pip3 install markdown pymdown-extensions) && python3 .build.py",
+  "buildCommand": "(pip3 install --break-system-packages markdown pymdown-extensions || pip3 install markdown pymdown-extensions) && python3 build.py",
   "outputDirectory": ".target",
   "cleanUrls": true,
   "trailingSlash": false

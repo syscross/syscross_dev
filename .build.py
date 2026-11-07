@@ -1,4 +1,52 @@
-<!DOCTYPE html>
+# /// script
+# dependencies = ["markdown", "pymdown-extensions"]
+# ///
+
+from pathlib import Path
+import re
+import shutil
+import markdown
+import pymdownx.superfences
+
+DEV_DIR = Path(__file__).resolve().parent
+TARGET_DIR = DEV_DIR / ".target"
+
+EXTENSIONS = [
+    "extra",
+    "admonition",
+    "sane_lists",
+    "toc",
+    "wikilinks",
+    "pymdownx.superfences",
+    "pymdownx.highlight",
+    "pymdownx.inlinehilite",
+    "pymdownx.arithmatex",
+    "pymdownx.tasklist",
+    "pymdownx.tilde",
+    "pymdownx.caret",
+    "pymdownx.mark",
+    "pymdownx.magiclink",
+    "pymdownx.details",
+    "pymdownx.keys",
+    "pymdownx.saneheaders",
+]
+
+EXTENSION_CONFIGS = {
+    "wikilinks": {"base_url": "/", "end_url": ""},
+    "pymdownx.arithmatex": {"generic": True},
+    "pymdownx.highlight": {"use_pygments": False},
+    "pymdownx.superfences": {
+        "custom_fences": [
+            {
+                "name": "mermaid",
+                "class": "mermaid",
+                "format": pymdownx.superfences.fence_div_format,
+            }
+        ]
+    },
+}
+
+HTML_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -47,6 +95,36 @@
     </script>
 </head>
 <body class="markdown-body">
-<h1 id="syscross">SysCross</h1>
+{body}
 </body>
 </html>
+"""
+
+
+def build() -> None:
+    if TARGET_DIR.exists():
+        shutil.rmtree(TARGET_DIR)
+    TARGET_DIR.mkdir(parents=True, exist_ok=True)
+
+    for md_path in DEV_DIR.rglob("*.md"):
+        rel = md_path.relative_to(DEV_DIR)
+        if any(part.startswith(".") for part in rel.parts):
+            continue
+
+        out_rel = rel.with_name("index.html") if rel.name.lower() == "readme.md" else rel.with_suffix(".html")
+        out_path = TARGET_DIR / out_rel
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        raw_md = md_path.read_text(encoding="utf-8")
+        clean_md = re.sub(r"\A---\r?\n.*?\r?\n---\r?\n?", "", raw_md, flags=re.DOTALL)
+        body = markdown.markdown(
+            clean_md,
+            extensions=EXTENSIONS,
+            extension_configs=EXTENSION_CONFIGS,
+        )
+        out_path.write_text(HTML_TEMPLATE.replace("{body}", body), encoding="utf-8")
+        print(f"{rel} -> .target/{out_rel}")
+
+
+if __name__ == "__main__":
+    build()

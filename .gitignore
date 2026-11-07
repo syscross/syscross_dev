@@ -3,4 +3,5 @@
 
 .obsidian/workspace*.json
 
+.target/
 .trash/

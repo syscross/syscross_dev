@@ -7,5 +7,3 @@ sorting-spec: |-
 ---
 
 # SysCross
-
-- [[TEST]]

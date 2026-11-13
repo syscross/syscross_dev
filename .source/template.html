@@ -4,26 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SysCross</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" media="(prefers-color-scheme: light)">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            color-scheme: dark;
             --bar-height: 56px;
             --bar-bg: #0d1117;
             --bar-fg: #ffffff;
             --bar-line: #30363d;
             --drawer-width: min(80vw, 300px);
-            --page-bg: #ffffff;
+            --page-bg: #0d1117;
         }
-        @media (prefers-color-scheme: dark) {
-            :root { --page-bg: #0d1117; }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-        body {
+        ::-webkit-scrollbar-track {
+            background: var(--page-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #30363d;
+            border-radius: 999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #484f58;
+        }
+        ::-webkit-scrollbar-thumb:active {
+            background-color: #6e7681;
+        }
+        ::-webkit-scrollbar-corner {
+            background: var(--page-bg);
+        }
+        @supports not selector(::-webkit-scrollbar) {
+            * {
+                scrollbar-width: thin;
+                scrollbar-color: #30363d var(--page-bg);
+            }
+        }
+        html, body {
             margin: 0;
             background-color: var(--page-bg);
         }
@@ -480,8 +503,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"></script>
     <script type="module">
         import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-        const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        mermaid.initialize({ startOnLoad: true, theme: isDark ? "dark" : "default" });
+        mermaid.initialize({ startOnLoad: true, theme: "dark" });
         window.addEventListener("DOMContentLoaded", () => {
             if (window.hljs) hljs.highlightAll();
             if (window.renderMathInElement) renderMathInElement(document.body);

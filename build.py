@@ -225,12 +225,10 @@ def render_toc(body: str) -> str:
 
 
 RIGHT_FALLBACK = (
-    '<div class="drawer-empty">'
-    '<a class="drawer-contact" href="mailto:syscross@proton.me">'
+    '<p class="drawer-contact">'
     '<span class="contact-icon" aria-hidden="true">✉️</span>'
     '<span>syscross@proton.me</span>'
-    '</a>'
-    '</div>'
+    '</p>'
 )
 
 

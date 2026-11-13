@@ -158,40 +158,21 @@
             font-size: 14px;
             color: #c9d1d9;
         }
-        /* TOC 없을 때 우측 서랍 중앙 연락처 카드 */
-        .drawer-empty {
+        /* TOC 없을 때 우측 서랍 상단 연락처 텍스트 */
+        .drawer-contact {
             display: flex;
             align-items: center;
-            justify-content: center;
-            min-height: 100%;
-            padding: 24px;
-            box-sizing: border-box;
-        }
-        .drawer-contact {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 18px;
-            border: 1px solid var(--bar-line);
-            border-radius: 12px;
-            background-color: rgba(255, 255, 255, 0.03);
-            color: #c9d1d9;
+            gap: 6px;
+            margin: 0;
+            padding: 18px 20px;
+            color: #8b949e;
             font-family: "Noto Sans Mono CJK JP", "Noto Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-            font-size: 13px;
+            font-size: 12px;
             letter-spacing: 0.02em;
-            text-decoration: none;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-            transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-        }
-        .drawer-contact:hover {
-            border-color: #6fa8d6;
-            background-color: rgba(111, 168, 214, 0.08);
-            color: #ffffff;
-            transform: translateY(-1px);
+            user-select: text;
         }
         .drawer-contact .contact-icon {
-            font-size: 16px;
-            line-height: 1;
+            user-select: none;
         }
         /* 제목 링크를 눌렀을 때 제목이 상단바에 가려지지 않게 */
         .markdown-body h2 {

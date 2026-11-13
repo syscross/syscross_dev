@@ -224,13 +224,29 @@ def render_toc(body: str) -> str:
     return "\n".join(f'<li><a href="#{m.group(1)}">{m.group(2)}</a></li>' for m in TOC_HEADING.finditer(body))
 
 
+RIGHT_FALLBACK = (
+    '<div class="drawer-empty">'
+    '<a class="drawer-contact" href="mailto:syscross@proton.me">'
+    '<span class="contact-icon" aria-hidden="true">✉️</span>'
+    '<span>syscross@proton.me</span>'
+    '</a>'
+    '</div>'
+)
+
+
+def render_right(toc: str) -> str:
+    if toc:
+        return f'    <ul class="drawer-list drawer-toc">\n{toc}\n    </ul>'
+    return f'    {RIGHT_FALLBACK}'
+
+
 # ---------------------------------------------------------------- 페이지 조립
 
 def compose(intro: str, body: str, left: str, right: str, html_cls: str = "", body_cls: str = "") -> str:
     html = (
         HTML_TEMPLATE
         .replace("{left}", left)
-        .replace("{right}", right)
+        .replace("{right}", render_right(right))
         .replace("{intro}", intro)
         .replace("{body}", body)
     )

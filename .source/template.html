@@ -47,7 +47,9 @@
             }
         }
         html, body {
+            height: 100%;
             margin: 0;
+            overflow: hidden;
             background-color: var(--page-bg);
         }
         .markdown-body, .markdown-body pre, .markdown-body code, .markdown-body tt {
@@ -108,18 +110,24 @@
             overflow-y: auto;
             overscroll-behavior: contain;
             -webkit-overflow-scrolling: touch;
-            transition: transform 0.28s ease;
+            transition: transform 0.28s ease, box-shadow 0.28s ease;
             z-index: 40;
         }
         .drawer-left {
             left: 0;
             transform: translateX(-100%);
-            box-shadow: 4px 0 16px rgba(0, 0, 0, 0.25);
+            border-right: 1px solid var(--bar-line);
+        }
+        .drawer-left.is-open {
+            box-shadow: 12px 0 32px rgba(0, 0, 0, 0.85), 4px 0 12px rgba(0, 0, 0, 0.6);
         }
         .drawer-right {
             right: 0;
             transform: translateX(100%);
-            box-shadow: -4px 0 16px rgba(0, 0, 0, 0.25);
+            border-left: 1px solid var(--bar-line);
+        }
+        .drawer-right.is-open {
+            box-shadow: -12px 0 32px rgba(0, 0, 0, 0.85), -4px 0 12px rgba(0, 0, 0, 0.6);
         }
 
         /* 서랍 안의 목록: 인덱스(좌)와 TOC(우) */
@@ -150,6 +158,41 @@
             font-size: 14px;
             color: #c9d1d9;
         }
+        /* TOC 없을 때 우측 서랍 중앙 연락처 카드 */
+        .drawer-empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100%;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+        .drawer-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border: 1px solid var(--bar-line);
+            border-radius: 12px;
+            background-color: rgba(255, 255, 255, 0.03);
+            color: #c9d1d9;
+            font-family: "Noto Sans Mono CJK JP", "Noto Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            text-decoration: none;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+            transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+        .drawer-contact:hover {
+            border-color: #6fa8d6;
+            background-color: rgba(111, 168, 214, 0.08);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+        .drawer-contact .contact-icon {
+            font-size: 16px;
+            line-height: 1;
+        }
         /* 제목 링크를 눌렀을 때 제목이 상단바에 가려지지 않게 */
         .markdown-body h2 {
             scroll-margin-top: calc(var(--bar-height) + 12px);
@@ -163,7 +206,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: #000000;
             opacity: 0;
             pointer-events: none;
             touch-action: none;
@@ -280,7 +323,7 @@
             cursor: pointer;
         }
         html.section-view .content {
-            padding-top: calc(var(--bar-height) + 44px);
+            padding-top: 44px;
         }
         /* 하위 바가 있는 화면에서는 본문 위쪽 여백을 없애서 내용이 하위 바 바로 아래에 오도록 */
         html.section-view .markdown-body {
@@ -310,7 +353,7 @@
             width: auto;
             margin: 0;
             border-radius: 0;
-            padding: calc(var(--bar-height) + 56px) 24px 56px;
+            padding: 56px 24px;
         }
         /* 아티클 뒤로 바: 흰색, 「< 현재 아티클 제목」 */
         body.article-view .markdown-body .subbar {
@@ -482,9 +525,19 @@
             .markdown-body .hero h1 { font-size: 22px; }
         }
 
-        /* 본문: 상단바와 하단바 사이 영역 */
+        /* 본문: 상단바 아래 독립 스크롤 영역 (우측 서랍이 본문 스크롤바 위를 덮도록) */
         .content {
-            padding-top: var(--bar-height);
+            position: fixed;
+            top: var(--bar-height);
+            right: 0;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        .content:focus {
+            outline: none;
         }
         .markdown-body {
             box-sizing: border-box;
@@ -512,6 +565,11 @@
     <script defer>
         window.addEventListener("DOMContentLoaded", () => {
             const body = document.body;
+            const content = document.querySelector(".content");
+            if (content) {
+                content.setAttribute("tabindex", "-1");
+                content.focus({ preventScroll: true });
+            }
             const drawerL = document.querySelector(".drawer-left");
             const drawerR = document.querySelector(".drawer-right");
             const scrim = document.querySelector(".scrim");
@@ -529,7 +587,9 @@
                 const r = Math.max(0, -s);
                 drawerL.style.transform = `translateX(${(l - 1) * 100}%)`;
                 drawerR.style.transform = `translateX(${(1 - r) * 100}%)`;
-                scrim.style.opacity = Math.max(l, r) * 0.4;
+                drawerL.classList.toggle("is-open", l > 0);
+                drawerR.classList.toggle("is-open", r > 0);
+                scrim.style.opacity = Math.max(l, r) * 0.55;
                 scrim.style.pointerEvents = s === 0 ? "none" : "auto";
                 // 왼쪽: 열 때 반시계 최대 90도, 오른쪽: 열 때 시계 최대 90도
                 iconL.style.transform = `rotate(${-90 * l}deg)`;
@@ -551,7 +611,7 @@
             document.querySelectorAll(".drawer a").forEach((a) => {
                 a.addEventListener("click", (e) => {
                     apply(0);
-                    if (!a.closest(".drawer-toc")) return;
+                    if (!a.closest(".drawer-toc") || !(a.getAttribute("href") || "").startsWith("#")) return;
                     e.preventDefault();
                     const target = document.getElementById(a.getAttribute("href").slice(1));
                     if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -664,9 +724,7 @@
     </ul>
 </aside>
 <aside class="drawer drawer-right" aria-label="오른쪽 메뉴">
-    <ul class="drawer-list drawer-toc">
 {right}
-    </ul>
 </aside>
 <div class="scrim"></div>
 <div class="content">

@@ -202,14 +202,20 @@
             transition: none;
         }
 
+        /* 카드 그리드: 남는 가로 공간에 맞춰 열을 늘리고, 중앙 정렬된 그리드 안에서 왼쪽부터 채움 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 420px));
+            justify-content: center;
+            gap: 16px;
+        }
         /* 카드: 이미지 위, 하단 라벨 */
         .card {
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 420px;
             aspect-ratio: 16 / 10;
-            margin: 12px auto;
+            margin: 0;
             border: 1px solid var(--bar-line);
             border-radius: 12px;
             overflow: hidden;
@@ -389,13 +395,15 @@
             padding: 0 24px;
         }
 
-        /* 섹션 리스트: 카테고리 카드보다 얇은 카드, 우측 정렬 */
+        /* 섹션 리스트: 카테고리 카드보다 얇은 카드, 중앙 기준 좌측 정렬 그리드 */
         .section-list {
-            max-width: 420px;
+            max-width: 1400px;
             margin: 12px auto 24px;
         }
         .thin-list {
             display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 420px));
+            justify-content: center;
             gap: 12px;
             margin: 0;
             padding: 0;
@@ -523,7 +531,7 @@
         .markdown-body {
             box-sizing: border-box;
             min-width: 200px;
-            max-width: 980px;
+            max-width: 1440px;
             margin: 0 auto;
             padding: 20px 16px 28px;
             font-size: 14px;

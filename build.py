@@ -190,7 +190,7 @@ def render_cards(categories: list[Category]) -> str:
             f'    </span>\n'
             f'</a>'
         )
-    return "\n".join(cards)
+    return '<div class="card-grid">\n' + "\n".join(cards) + "\n</div>"
 
 
 def render_list(cat: Category) -> str:
@@ -208,15 +208,11 @@ def render_list(cat: Category) -> str:
 
 
 def render_index(categories: list[Category]) -> str:
-    """좌측 사이드바: 카테고리 > 글"""
-    lines = []
-    for cat in categories:
-        lines.append(f'<li><a href="{cat.href}">{cat.title}</a></li>')
-        lines += [f'<li class="sub"><a href="{art.href}">{art.title}</a></li>' for art in cat.articles]
-    return "\n".join(lines)
+    """좌측 사이드바: 카테고리 목록"""
+    return "\n".join(f'<li><a href="{cat.href}">{cat.title}</a></li>' for cat in categories)
 
 
-# 우측 사이드바: 현재 글의 소제목(h2) 목록
+# 우측 사이드바: 메인(이메일) / 카테고리(글 목록) / 글(소제목 TOC)
 TOC_HEADING = re.compile(r'<h2 id="([^"]+)">(.*?)</h2>', re.DOTALL)
 
 
@@ -224,18 +220,26 @@ def render_toc(body: str) -> str:
     return "\n".join(f'<li><a href="#{m.group(1)}">{m.group(2)}</a></li>' for m in TOC_HEADING.finditer(body))
 
 
-RIGHT_FALLBACK = (
-    '<p class="drawer-contact">'
+RIGHT_EMAIL = (
+    '    <p class="drawer-contact">'
     '<span class="contact-icon" aria-hidden="true">✉️</span>'
     '<span>syscross@proton.me</span>'
     '</p>'
 )
 
 
-def render_right(toc: str) -> str:
+def render_cat_posts(cat: Category) -> str:
+    if not cat.articles:
+        return '    <p class="empty-list">아직 글이 없습니다.</p>'
+    items = "\n".join(f'<li><a href="{art.href}">{art.title}</a></li>' for art in cat.articles)
+    return f'    <ul class="drawer-list">\n{items}\n    </ul>'
+
+
+def render_toc_drawer(body: str, cat: Category) -> str:
+    toc = render_toc(body)
     if toc:
         return f'    <ul class="drawer-list drawer-toc">\n{toc}\n    </ul>'
-    return f'    {RIGHT_FALLBACK}'
+    return render_cat_posts(cat)
 
 
 # ---------------------------------------------------------------- 페이지 조립
@@ -244,7 +248,7 @@ def compose(intro: str, body: str, left: str, right: str, html_cls: str = "", bo
     html = (
         HTML_TEMPLATE
         .replace("{left}", left)
-        .replace("{right}", render_right(right))
+        .replace("{right}", right)
         .replace("{intro}", intro)
         .replace("{body}", body)
     )
@@ -274,15 +278,15 @@ def build() -> None:
     categories = collect_categories()
     left = render_index(categories)
 
-    # 메인: 카테고리 카드
+    # 메인: 카테고리 카드 (좌측=카테고리, 우측=이메일)
     write(OUTPUT_DIR / "index.html", compose(
-        intro=render_cards(categories), body="", left=left, right=""))
+        intro=render_cards(categories), body="", left=left, right=RIGHT_EMAIL))
 
     for cat in categories:
-        # 카테고리 화면: 상단 하위 바 + 글 목록
+        # 카테고리 화면: 상단 하위 바 + 글 목록 (좌측=카테고리, 우측=해당 카테고리 포스트)
         intro = CATEGORY_BAR.replace("{title}", cat.title).replace("{list}", render_list(cat))
         write(OUTPUT_DIR / cat.folder / "index.html", compose(
-            intro=intro, body="", left=left, right="", html_cls="section-view"))
+            intro=intro, body="", left=left, right=render_cat_posts(cat), html_cls="section-view"))
 
         for art in cat.articles:
             # 글: 제목 영역 바로 아래에 뒤로 바(카테고리로 돌아감)를 놓고 본문을 이어 씀
@@ -295,7 +299,7 @@ def build() -> None:
             else:
                 content = bar + art.body
             write(OUTPUT_DIR / art.out_rel, compose(
-                intro="", body=content, left=left, right=render_toc(art.body), body_cls="article-view"))
+                intro="", body=content, left=left, right=render_toc_drawer(art.body, cat), body_cls="article-view"))
 
 
 if __name__ == "__main__":

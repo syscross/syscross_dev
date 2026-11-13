@@ -538,8 +538,7 @@
             document.addEventListener("keydown", (e) => { if (e.key === "Escape") apply(0); });
 
             // 터치를 유지한 채 끌면 서랍이 손가락을 따라감. 손을 떼면 절반을 넘었는지로 열림/닫힘 결정
-            // 닫힌 상태(s === 0)에서는 좌우 가장자리(28px)나 메뉴 버튼에서 시작할 때만 열어 본문 스크롤 간섭을 막음
-            const EDGE_PX = 28;
+            // 코드·표처럼 가로 스크롤되는 곳에서 시작한 터치는 무시
             let drag = null;
 
             window.addEventListener("touchstart", (e) => {
@@ -549,23 +548,11 @@
                     return;
                 }
                 const t = e.target;
-                const x = e.touches[0].clientX;
-                const y = e.touches[0].clientY;
                 if (!t.closest(".menu-btn") && t.closest("pre, table")) { drag = null; return; }
-                let lo, hi;
-                if (s > 0) {
-                    lo = 0; hi = 1;
-                } else if (s < 0) {
-                    lo = -1; hi = 0;
-                } else {
-                    const btn = t.closest(".menu-btn");
-                    const fromLeft = (btn && btn.dataset.open === "left") || x <= EDGE_PX;
-                    const fromRight = (btn && btn.dataset.open === "right") || x >= window.innerWidth - EDGE_PX;
-                    if (fromLeft && !fromRight) { lo = 0; hi = 1; }
-                    else if (fromRight && !fromLeft) { lo = -1; hi = 0; }
-                    else { drag = null; return; }
-                }
-                drag = { x, y, s0: s, lo, hi, active: false, samples: [] };
+                // 열린 서랍이 있으면 그 서랍을 닫는 방향으로만 움직임 (반대쪽 서랍으로 바로 넘어가지 않음)
+                const lo = s > 0 ? 0 : -1;
+                const hi = s < 0 ? 0 : 1;
+                drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, s0: s, lo, hi, active: false, samples: [] };
             }, { passive: true });
 
             window.addEventListener("touchmove", (e) => {

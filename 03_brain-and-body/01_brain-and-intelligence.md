@@ -6,7 +6,7 @@ hero_position: 50% 25%
 
 # 두뇌와 지능
 
-Brain & Intelligence
+Human Intelligence
 
 ---
 

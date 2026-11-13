@@ -5,5 +5,3 @@ sorting-spec: |-
   /folders
   < vsc-unicode
 ---
-
-# SysCross

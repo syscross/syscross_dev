@@ -72,17 +72,19 @@
             transition: transform 0.28s ease;
         }
 
-        /* 좌우 서랍 메뉴: 상단바와 하단바 사이에서만 열림 (내용은 비워 둠) */
+        /* 좌우 서랍 메뉴: 상단바 아래부터 화면 끝까지 열림 */
         /* 위치는 JS가 손가락 움직임에 맞춰 직접 지정 */
         .drawer {
             position: fixed;
             top: var(--bar-height);
-            bottom: var(--bar-height);
+            bottom: 0;
             width: var(--drawer-width);
             box-sizing: border-box;
             background-color: var(--bar-bg);
             color: var(--bar-fg);
             overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
             transition: transform 0.28s ease;
             z-index: 40;
         }
@@ -135,12 +137,13 @@
         .scrim {
             position: fixed;
             top: var(--bar-height);
-            bottom: var(--bar-height);
+            bottom: 0;
             left: 0;
             right: 0;
             background-color: rgba(0, 0, 0, 0.4);
             opacity: 0;
             pointer-events: none;
+            touch-action: none;
             transition: opacity 0.28s ease;
             z-index: 35;
         }
@@ -535,25 +538,53 @@
             document.addEventListener("keydown", (e) => { if (e.key === "Escape") apply(0); });
 
             // 터치를 유지한 채 끌면 서랍이 손가락을 따라감. 손을 떼면 절반을 넘었는지로 열림/닫힘 결정
-            // 코드·표처럼 가로 스크롤되는 곳에서 시작한 터치는 무시
+            // 닫힌 상태(s === 0)에서는 좌우 가장자리(28px)나 메뉴 버튼에서 시작할 때만 열어 본문 스크롤 간섭을 막음
+            const EDGE_PX = 28;
             let drag = null;
 
             window.addEventListener("touchstart", (e) => {
+                if (e.touches.length !== 1) {
+                    drag = null;
+                    body.classList.remove("dragging");
+                    return;
+                }
                 const t = e.target;
+                const x = e.touches[0].clientX;
+                const y = e.touches[0].clientY;
                 if (!t.closest(".menu-btn") && t.closest("pre, table")) { drag = null; return; }
-                // 열린 서랍이 있으면 그 서랍을 닫는 방향으로만 움직임 (반대쪽 서랍으로 바로 넘어가지 않음)
-                const lo = s > 0 ? 0 : -1;
-                const hi = s < 0 ? 0 : 1;
-                drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, s0: s, lo, hi, active: false, samples: [] };
+                let lo, hi;
+                if (s > 0) {
+                    lo = 0; hi = 1;
+                } else if (s < 0) {
+                    lo = -1; hi = 0;
+                } else {
+                    const btn = t.closest(".menu-btn");
+                    const fromLeft = (btn && btn.dataset.open === "left") || x <= EDGE_PX;
+                    const fromRight = (btn && btn.dataset.open === "right") || x >= window.innerWidth - EDGE_PX;
+                    if (fromLeft && !fromRight) { lo = 0; hi = 1; }
+                    else if (fromRight && !fromLeft) { lo = -1; hi = 0; }
+                    else { drag = null; return; }
+                }
+                drag = { x, y, s0: s, lo, hi, active: false, samples: [] };
             }, { passive: true });
 
             window.addEventListener("touchmove", (e) => {
                 if (!drag) return;
+                if (e.touches.length !== 1) {
+                    drag = null;
+                    body.classList.remove("dragging");
+                    return;
+                }
                 const dx = e.touches[0].clientX - drag.x;
                 const dy = e.touches[0].clientY - drag.y;
                 if (!drag.active) {
-                    if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 8) { drag = null; return; }  // 세로 스크롤로 판단
-                    if (Math.abs(dx) < 8) return;
+                    // 세로·대각선 스크롤 의도이거나 브라우저가 이미 네이티브 스크롤을 시작했으면 즉시 포기
+                    if (!e.cancelable || (Math.abs(dy) > 8 && Math.abs(dy) >= Math.abs(dx) * 0.8)) {
+                        drag = null;
+                        return;
+                    }
+                    // 확실한 수평 스와이프일 때만 서랍 드래그 진입
+                    if (Math.abs(dx) <= 14 || Math.abs(dx) <= Math.abs(dy) * 1.6) return;
                     drag.active = true;
                     body.classList.add("dragging");
                 }
@@ -566,6 +597,7 @@
             // 관성: 손을 뗀 순간의 속도로 도달할 지점을 예측하고, 가장 가까운 상태(왼쪽 열림 / 닫힘 / 오른쪽 열림)로 정함
             const FLICK_MS = 250;
             const endDrag = () => {
+                body.classList.remove("dragging");
                 if (!drag) return;
                 const { active, samples, lo, hi } = drag;
                 drag = null;

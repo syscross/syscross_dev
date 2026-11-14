@@ -47,9 +47,7 @@
             }
         }
         html, body {
-            height: 100%;
             margin: 0;
-            overflow: hidden;
             background-color: var(--page-bg);
         }
         .markdown-body, .markdown-body pre, .markdown-body code, .markdown-body tt {
@@ -310,7 +308,7 @@
             cursor: pointer;
         }
         html.section-view .content {
-            padding-top: 44px;
+            padding-top: calc(var(--bar-height) + 44px);
         }
         /* 하위 바가 있는 화면에서는 본문 위쪽 여백을 없애서 내용이 하위 바 바로 아래에 오도록 */
         html.section-view .markdown-body {
@@ -327,9 +325,6 @@
             display: block !important;
         }
         /* 아티클 화면: 제목 영역이 가로·상단까지 꽉 차고, 뒤로 바는 제목 아래 흐름에 놓이며, 본문은 그 아래에서 시작 */
-        body.article-view .content {
-            padding-top: 0;
-        }
         /* 폭은 100vw 대신 화면 실제 폭(자동)을 써서 세로 스크롤바 너비만큼 밀리지 않게 함 */
         body.article-view .markdown-body {
             max-width: none;
@@ -510,23 +505,14 @@
             color: #8b949e;
         }
         @media (max-width: 767px) {
-            .markdown-body .hero { padding: 40px 16px; }
+            .markdown-body .hero,
+            body.article-view .markdown-body .hero { padding: 40px 16px; }
             .markdown-body .hero h1 { font-size: 22px; }
         }
 
-        /* 본문: 상단바 아래 독립 스크롤 영역 (우측 서랍이 본문 스크롤바 위를 덮도록) */
+        /* 본문: 상단바에 가리지 않게 위쪽 여백을 둠 */
         .content {
-            position: fixed;
-            top: var(--bar-height);
-            right: 0;
-            bottom: 0;
-            left: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-        }
-        .content:focus {
-            outline: none;
+            padding-top: var(--bar-height);
         }
         .markdown-body {
             box-sizing: border-box;
@@ -551,11 +537,6 @@
     <script defer>
         window.addEventListener("DOMContentLoaded", () => {
             const body = document.body;
-            const content = document.querySelector(".content");
-            if (content) {
-                content.setAttribute("tabindex", "-1");
-                content.focus({ preventScroll: true });
-            }
             const drawerL = document.querySelector(".drawer-left");
             const drawerR = document.querySelector(".drawer-right");
             const scrim = document.querySelector(".scrim");

@@ -212,6 +212,11 @@ def render_index(categories: list[Category]) -> str:
     return "\n".join(f'<li><a href="{cat.href}">{cat.title}</a></li>' for cat in categories)
 
 
+def render_posts(cat: Category) -> str:
+    """아티클 화면 좌측 사이드바: 해당 카테고리 내 글 목록"""
+    return "\n".join(f'<li><a href="{art.href}">{art.title}</a></li>' for art in cat.articles)
+
+
 # 우측 사이드바: 메인(이메일) / 카테고리(글 목록) / 글(소제목 TOC)
 TOC_HEADING = re.compile(r'<h2 id="([^"]+)">(.*?)</h2>', re.DOTALL)
 
@@ -299,7 +304,7 @@ def build() -> None:
             else:
                 content = bar + art.body
             write(OUTPUT_DIR / art.out_rel, compose(
-                intro="", body=content, left=left, right=render_toc_drawer(art.body, cat), body_cls="article-view"))
+                intro="", body=content, left=render_posts(cat), right=render_toc_drawer(art.body, cat), body_cls="article-view"))
 
 
 if __name__ == "__main__":

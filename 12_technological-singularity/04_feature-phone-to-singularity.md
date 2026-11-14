@@ -4,9 +4,9 @@ thumb: /assets/thumb-feature-phone-singularity.jpg
 hero_position: 50% 50%
 ---
 
-# 어제는 피처폰, 오늘은 스마트폰, 내일은 특이점
+# 피처폰에서 특이점으로
 
-Yesterday Feature Phone, Today Smartphone, Tomorrow Singularity
+From Feature Phones to Singularity
 
 ---
 

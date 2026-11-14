@@ -47,8 +47,12 @@
             }
         }
         html, body {
+            min-height: 100%;
             margin: 0;
             background-color: var(--page-bg);
+        }
+        body {
+            overflow-x: clip;
         }
         .markdown-body, .markdown-body pre, .markdown-body code, .markdown-body tt {
             font-family: "Noto Sans Mono CJK JP", "Noto Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -68,7 +72,7 @@
             background-color: var(--bar-bg);
             color: var(--bar-fg);
             border-bottom: 1px solid var(--bar-line);
-            z-index: 30;
+            z-index: 40;
         }
         .topbar .brand {
             color: var(--bar-fg);
@@ -100,16 +104,17 @@
         .drawer {
             position: fixed;
             top: var(--bar-height);
-            bottom: 0;
+            height: calc(100vh - var(--bar-height));
+            height: calc(100lvh - var(--bar-height));
             width: var(--drawer-width);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
             box-sizing: border-box;
             background-color: var(--bar-bg);
             color: var(--bar-fg);
             overflow-y: auto;
             overscroll-behavior: contain;
-            -webkit-overflow-scrolling: touch;
             transition: transform 0.28s ease, box-shadow 0.28s ease;
-            z-index: 40;
+            z-index: 30;
         }
         .drawer-left {
             left: 0;
@@ -172,17 +177,27 @@
         .drawer-contact .contact-icon {
             user-select: none;
         }
-        /* 제목 링크를 눌렀을 때 제목이 상단바에 가려지지 않게 */
+        /* 제목 링크를 눌렀을 때 제목이 상단 하위 바에 가려지지 않게 */
         .markdown-body h2 {
-            scroll-margin-top: calc(var(--bar-height) + 12px);
+            scroll-margin-top: 52px;
             border-bottom: 0;
             font-size: 1.25em;
+        }
+        .content {
+            position: relative;
+            padding-top: var(--bar-height);
+            min-height: 100vh;
+            min-height: 100dvh;
+            box-sizing: border-box;
+            overflow-x: clip;
+            z-index: 1;
         }
 
         .scrim {
             position: fixed;
             top: var(--bar-height);
-            bottom: 0;
+            height: calc(100vh - var(--bar-height));
+            height: calc(100lvh - var(--bar-height));
             left: 0;
             right: 0;
             background-color: #000000;
@@ -190,7 +205,7 @@
             pointer-events: none;
             touch-action: none;
             transition: opacity 0.28s ease;
-            z-index: 35;
+            z-index: 25;
         }
 
         /* 끌고 있는 동안에는 애니메이션 없이 손가락을 따라감 */
@@ -255,24 +270,24 @@
 
         /* 섹션 보기일 때 나오는 상단 하위 바: < 삶과 철학 */
         .subbar {
-            position: fixed;
-            top: calc(var(--bar-height) + 8px);
-            left: 0;
-            right: 0;
-            height: 36px;
+            position: sticky;
+            top: var(--bar-height);
+            height: 40px;
             display: flex;
             align-items: center;
             gap: 2px;
             box-sizing: border-box;
-            padding: 0 6px;
+            margin: 0 -16px;
+            padding: 0 10px;
             background-color: var(--bar-bg);
             color: #6fa8d6;
-            z-index: 28;
+            z-index: 20;
         }
         .back-btn {
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
             width: 32px;
             height: 32px;
             padding: 0;
@@ -306,9 +321,6 @@
             text-align: left;
             text-decoration: none;
             cursor: pointer;
-        }
-        html.section-view .content {
-            padding-top: calc(var(--bar-height) + 44px);
         }
         /* 하위 바가 있는 화면에서는 본문 위쪽 여백을 없애서 내용이 하위 바 바로 아래에 오도록 */
         html.section-view .markdown-body {
@@ -345,8 +357,11 @@
             color: #6fa8d6;
         }
         .article-crumb {
+            min-width: 0;
+            overflow-wrap: anywhere;
             font-size: 13px;
             font-weight: 700;
+            line-height: 1.8;
             color: #ffffff;
         }
         /* 카드 전체가 링크: 어디를 눌러도 동작하고, 글자 밑줄은 나오지 않음 (마크다운 기본 :hover 밑줄 차단) */
@@ -367,6 +382,11 @@
             text-decoration: none;
             padding: 8px 0;
         }
+        .article-crumb .crumb-back {
+            display: inline-flex;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
         .article-crumb .crumb-sep {
             display: inline-flex;
             vertical-align: middle;
@@ -378,9 +398,10 @@
             left: auto;
             right: auto;
             width: auto;
-            height: 36px;
+            height: auto;
+            min-height: 36px;
             margin: 0 0 12px;
-            padding: 0 12px;
+            padding: 6px 12px;
         }
         body.article-view .markdown-body > *:not(.hero):not(.subbar) {
             box-sizing: border-box;
@@ -510,10 +531,6 @@
             .markdown-body .hero h1 { font-size: 22px; }
         }
 
-        /* 본문: 상단바에 가리지 않게 위쪽 여백을 둠 */
-        .content {
-            padding-top: var(--bar-height);
-        }
         .markdown-body {
             box-sizing: border-box;
             min-width: 200px;
@@ -545,7 +562,6 @@
 
             // s: +1 = 왼쪽 서랍 완전히 열림, -1 = 오른쪽 서랍 완전히 열림, 0 = 닫힘, 사이값 = 열린 정도
             let s = 0;
-            const clamp = (v) => Math.max(-1, Math.min(1, v));
             const drawerWidth = () => Math.min(window.innerWidth * 0.8, 300);
 
             const apply = (value) => {
@@ -574,7 +590,7 @@
             });
             scrim.addEventListener("click", () => apply(0));
             // 서랍 안의 링크를 누르면 서랍을 닫고 이동
-            // 목차(우측) 링크는 본문 영역 안에서 해당 제목으로 스크롤 (본문이 별도 스크롤 영역이라 직접 처리)
+            // 목차(우측) 링크는 해당 제목으로 부드럽게 스크롤
             document.querySelectorAll(".drawer a").forEach((a) => {
                 a.addEventListener("click", (e) => {
                     apply(0);
@@ -590,10 +606,18 @@
             // 코드·표처럼 가로 스크롤되는 곳에서 시작한 터치는 무시
             let drag = null;
 
+            const snapNearest = (lo = -1, hi = 1) => {
+                const target = [-1, 0, 1]
+                    .filter((v) => v >= lo && v <= hi)
+                    .reduce((a, b) => (Math.abs(b - s) < Math.abs(a - s) ? b : a));
+                apply(target);
+            };
+
             window.addEventListener("touchstart", (e) => {
                 if (e.touches.length !== 1) {
-                    drag = null;
                     body.classList.remove("dragging");
+                    if (drag && drag.active) snapNearest(drag.lo, drag.hi);
+                    drag = null;
                     return;
                 }
                 const t = e.target;
@@ -607,15 +631,16 @@
             window.addEventListener("touchmove", (e) => {
                 if (!drag) return;
                 if (e.touches.length !== 1) {
-                    drag = null;
                     body.classList.remove("dragging");
+                    if (drag.active) snapNearest(drag.lo, drag.hi);
+                    drag = null;
                     return;
                 }
                 const dx = e.touches[0].clientX - drag.x;
                 const dy = e.touches[0].clientY - drag.y;
                 if (!drag.active) {
                     // 세로·대각선 스크롤 의도이거나 브라우저가 이미 네이티브 스크롤을 시작했으면 즉시 포기
-                    if (!e.cancelable || (Math.abs(dy) > 8 && Math.abs(dy) >= Math.abs(dx) * 0.8)) {
+                    if (!e.cancelable || (Math.abs(dy) > 5 && Math.abs(dy) >= Math.abs(dx) * 0.8)) {
                         drag = null;
                         return;
                     }
@@ -671,7 +696,6 @@
             window.addEventListener("touchcancel", endDrag, { passive: true });
 
             apply(0);
-
         });
     </script>
 </head>

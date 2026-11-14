@@ -1,0 +1,4 @@
+---
+title: Academy
+type: section
+---

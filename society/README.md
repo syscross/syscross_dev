@@ -1,0 +1,4 @@
+---
+title: Society
+type: section
+---

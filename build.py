@@ -118,7 +118,17 @@ class Category:
     en: str
     image: str
     image_alt: str
+    parent_href: str = "/"
+    parent_title: str = "메인"
     articles: list[Article] = field(default_factory=list)
+
+
+@dataclass
+class Section:
+    folder: str
+    href: str
+    title: str
+    categories: list[Category] = field(default_factory=list)
 
 
 def load_article(md_path: Path, folder: str) -> Article:
@@ -148,35 +158,64 @@ def load_article(md_path: Path, folder: str) -> Article:
     )
 
 
-def collect_categories() -> list[Category]:
-    """최상위 폴더 중 README.md가 있는 곳이 카테고리. README 프론트매터가 카테고리 정보."""
+def collect_categories(root: Path = DEV_DIR, prefix: str = "", parent_href: str = "/", parent_title: str = "메인") -> list[Category]:
+    """README.md가 있는 폴더 중 섹션(type: section)이 아닌 곳을 카테고리로 수집."""
     categories = []
+    folders = sorted(
+        (p for p in root.iterdir() if p.is_dir() and not p.name.startswith(".") and (p / "README.md").exists()),
+        key=lambda p: p.name,
+    )
+    for folder in folders:
+        meta = read_front((folder / "README.md").read_text(encoding="utf-8"))
+        if meta.get("type") == "section":
+            continue
+        rel = f"{prefix}/{folder.name}" if prefix else folder.name
+        articles = [
+            load_article(md, rel)
+            for md in sorted(folder.glob("*.md"))
+            if md.name.lower() != "readme.md"
+        ]
+        categories.append(Category(
+            folder=rel,
+            href=f"/{rel}/",
+            title=meta.get("title", folder.name),
+            en=meta.get("en", ""),
+            image=meta.get("image", ""),
+            image_alt=meta.get("image_alt", ""),
+            parent_href=parent_href,
+            parent_title=parent_title,
+            articles=articles,
+        ))
+    return categories
+
+
+def collect_sections() -> list[Section]:
+    """최상위 폴더 중 type: section인 곳을 좌측 사이드바 섹션으로 수집."""
+    sections = []
     folders = sorted(
         (p for p in DEV_DIR.iterdir() if p.is_dir() and not p.name.startswith(".") and (p / "README.md").exists()),
         key=lambda p: p.name,
     )
     for folder in folders:
         meta = read_front((folder / "README.md").read_text(encoding="utf-8"))
-        articles = [
-            load_article(md, folder.name)
-            for md in sorted(folder.glob("*.md"))
-            if md.name.lower() != "readme.md"
-        ]
-        categories.append(Category(
+        if meta.get("type") != "section":
+            continue
+        sec_title = meta.get("title", folder.name)
+        sec_href = f"/{folder.name}/"
+        sections.append(Section(
             folder=folder.name,
-            href=f"/{folder.name}/",
-            title=meta.get("title", folder.name),
-            en=meta.get("en", ""),
-            image=meta.get("image", ""),
-            image_alt=meta.get("image_alt", ""),
-            articles=articles,
+            href=sec_href,
+            title=sec_title,
+            categories=collect_categories(folder, prefix=folder.name, parent_href=sec_href, parent_title=sec_title),
         ))
-    return categories
+    return sections
 
 
 # ---------------------------------------------------------------- 조각 렌더링
 
 def render_cards(categories: list[Category]) -> str:
+    if not categories:
+        return '<p class="empty-list">아직 글이 없습니다.</p>'
     cards = []
     for cat in categories:
         cards.append(
@@ -217,20 +256,12 @@ def render_posts(cat: Category) -> str:
     return "\n".join(f'<li><a href="{art.href}">{art.title}</a></li>' for art in cat.articles)
 
 
-# 우측 사이드바: 메인(이메일) / 카테고리(글 목록) / 글(소제목 TOC)
+# 우측 사이드바: 메인(카테고리 목록) / 카테고리(글 목록) / 글(소제목 TOC)
 TOC_HEADING = re.compile(r'<h2 id="([^"]+)">(.*?)</h2>', re.DOTALL)
 
 
 def render_toc(body: str) -> str:
     return "\n".join(f'<li><a href="#{m.group(1)}">{m.group(2)}</a></li>' for m in TOC_HEADING.finditer(body))
-
-
-RIGHT_EMAIL = (
-    '    <p class="drawer-contact">'
-    '<span class="contact-icon" aria-hidden="true">✉️</span>'
-    '<span>syscross@proton.me</span>'
-    '</p>'
-)
 
 
 def render_cat_posts(cat: Category) -> str:
@@ -270,26 +301,22 @@ def write(out_path: Path, html: str) -> None:
     print(f"{out_path.relative_to(OUTPUT_DIR)} -> .target/{out_path.relative_to(OUTPUT_DIR)}")
 
 
-def build() -> None:
-    if OUTPUT_DIR.exists():
-        shutil.rmtree(OUTPUT_DIR)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+def render_right_index(categories: list[Category]) -> str:
+    if not categories:
+        return '    <p class="empty-list">아직 글이 없습니다.</p>'
+    return f'    <ul class="drawer-list">\n{render_index(categories)}\n    </ul>'
 
-    # 정적 자산은 .source/assets에서 .target/assets로 그대로 복사
-    assets_dir = SOURCE_DIR / "assets"
-    if assets_dir.exists():
-        shutil.copytree(assets_dir, OUTPUT_DIR / "assets")
 
-    categories = collect_categories()
-    left = render_index(categories)
-
-    # 메인: 카테고리 카드 (좌측=카테고리, 우측=이메일)
-    write(OUTPUT_DIR / "index.html", compose(
-        intro=render_cards(categories), body="", left=left, right=RIGHT_EMAIL))
-
+def emit_categories(categories: list[Category], left: str) -> None:
     for cat in categories:
-        # 카테고리 화면: 상단 하위 바 + 글 목록 (좌측=카테고리, 우측=해당 카테고리 포스트)
-        intro = CATEGORY_BAR.replace("{title}", cat.title).replace("{list}", render_list(cat))
+        # 카테고리 화면: 상단 하위 바 + 글 목록 (좌측=섹션 목록, 우측=해당 카테고리 포스트)
+        intro = (
+            CATEGORY_BAR
+            .replace("{parent_href}", cat.parent_href)
+            .replace("{parent_label}", f"{cat.parent_title}(으)로 돌아가기")
+            .replace("{title}", cat.title)
+            .replace("{list}", render_list(cat))
+        )
         write(OUTPUT_DIR / cat.folder / "index.html", compose(
             intro=intro, body="", left=left, right=render_cat_posts(cat), html_cls="section-view"))
 
@@ -305,6 +332,32 @@ def build() -> None:
                 content = bar + art.body
             write(OUTPUT_DIR / art.out_rel, compose(
                 intro="", body=content, left=render_posts(cat), right=render_toc_drawer(art.body, cat), body_cls="article-view"))
+
+
+def build() -> None:
+    if OUTPUT_DIR.exists():
+        shutil.rmtree(OUTPUT_DIR)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # 정적 자산은 .source/assets에서 .target/assets로 그대로 복사
+    assets_dir = SOURCE_DIR / "assets"
+    if assets_dir.exists():
+        shutil.copytree(assets_dir, OUTPUT_DIR / "assets")
+
+    categories = collect_categories()
+    sections = collect_sections()
+    left = render_index(sections)
+
+    # 메인: 카테고리 카드 (좌측=섹션 목록, 우측=카테고리 목록)
+    write(OUTPUT_DIR / "index.html", compose(
+        intro=render_cards(categories), body="", left=left, right=render_right_index(categories)))
+
+    emit_categories(categories, left)
+
+    for sec in sections:
+        write(OUTPUT_DIR / sec.folder / "index.html", compose(
+            intro=render_cards(sec.categories), body="", left=left, right=render_right_index(sec.categories)))
+        emit_categories(sec.categories, left)
 
 
 if __name__ == "__main__":

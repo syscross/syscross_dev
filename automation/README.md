@@ -1,0 +1,4 @@
+---
+title: Automation
+type: section
+---

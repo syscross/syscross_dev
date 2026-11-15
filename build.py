@@ -136,6 +136,7 @@ def load_article(md_path: Path, folder: str) -> Article:
     front = read_front(raw)
     clean = strip_front(raw)
     body = markdown.markdown(clean, extensions=EXTENSIONS, extension_configs=EXTENSION_CONFIGS)
+    body = re.sub(r"<table>(.*?)</table>", r'<div class="table-wrap"><table>\1</table></div>', body, flags=re.DOTALL)
 
     # 목록에 쓸 영문 부제: h1 바로 다음 문단(구분선이 뒤따를 때만)
     en = ""

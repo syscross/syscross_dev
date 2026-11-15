@@ -247,14 +247,9 @@ def render_list(cat: Category) -> str:
     return '<ul class="thin-list">\n' + "\n".join(items) + "\n</ul>"
 
 
-def render_index(categories: list[Category]) -> str:
-    """좌측 사이드바: 카테고리 목록"""
+def render_index(categories: list[Category] | list[Section]) -> str:
+    """사이드바: 카테고리 또는 섹션 목록"""
     return "\n".join(f'<li><a href="{cat.href}">{cat.title}</a></li>' for cat in categories)
-
-
-def render_posts(cat: Category) -> str:
-    """아티클 화면 좌측 사이드바: 해당 카테고리 내 글 목록"""
-    return "\n".join(f'<li><a href="{art.href}">{art.title}</a></li>' for art in cat.articles)
 
 
 # 우측 사이드바: 메인(카테고리 목록) / 카테고리(글 목록) / 글(소제목 TOC)
@@ -302,10 +297,10 @@ def write(out_path: Path, html: str) -> None:
     print(f"{out_path.relative_to(OUTPUT_DIR)} -> .target/{out_path.relative_to(OUTPUT_DIR)}")
 
 
-def render_right_index(categories: list[Category]) -> str:
-    if not categories:
+def render_drawer_index(items: list[Category] | list[Section]) -> str:
+    if not items:
         return '    <p class="empty-list">아직 글이 없습니다.</p>'
-    return f'    <ul class="drawer-list">\n{render_index(categories)}\n    </ul>'
+    return f'    <ul class="drawer-list">\n{render_index(items)}\n    </ul>'
 
 
 def emit_categories(categories: list[Category], left: str) -> None:
@@ -332,7 +327,7 @@ def emit_categories(categories: list[Category], left: str) -> None:
             else:
                 content = bar + art.body
             write(OUTPUT_DIR / art.out_rel, compose(
-                intro="", body=content, left=render_posts(cat), right=render_toc_drawer(art.body, cat), body_cls="article-view"))
+                intro="", body=content, left=render_cat_posts(cat), right=render_toc_drawer(art.body, cat), body_cls="article-view"))
 
 
 def build() -> None:
@@ -347,17 +342,17 @@ def build() -> None:
 
     categories = collect_categories()
     sections = collect_sections()
-    left = render_index(sections)
+    left = render_drawer_index(sections)
 
     # 메인: 카테고리 카드 (좌측=섹션 목록, 우측=카테고리 목록)
     write(OUTPUT_DIR / "index.html", compose(
-        intro=render_cards(categories), body="", left=left, right=render_right_index(categories)))
+        intro=render_cards(categories), body="", left=left, right=render_drawer_index(categories)))
 
     emit_categories(categories, left)
 
     for sec in sections:
         write(OUTPUT_DIR / sec.folder / "index.html", compose(
-            intro=render_cards(sec.categories), body="", left=left, right=render_right_index(sec.categories)))
+            intro=render_cards(sec.categories), body="", left=left, right=render_drawer_index(sec.categories)))
         emit_categories(sec.categories, left)
 
 
